@@ -1,4 +1,4 @@
-package com.souza.souzafood.domain.model.input;
+package com.souza.souzafood.api.model.input;
 
 import java.math.BigDecimal;
 

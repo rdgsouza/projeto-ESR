@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.souza.souzafood.api.assembler.CidadeInputDisassembler;
 import com.souza.souzafood.api.assembler.CidadeModelAssembler;
 import com.souza.souzafood.api.model.CidadeModel;
+import com.souza.souzafood.api.model.input.CidadeInput;
 import com.souza.souzafood.domain.exception.EstadoNaoEncontradoException;
 import com.souza.souzafood.domain.exception.NegocioException;
 import com.souza.souzafood.domain.model.Cidade;
-import com.souza.souzafood.domain.model.input.CidadeInput;
 import com.souza.souzafood.domain.repository.CidadeRepository;
 import com.souza.souzafood.domain.service.CadastroCidadeService;
 

@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.souza.souzafood.api.assembler.CozinhaInputDisassembler;
 import com.souza.souzafood.api.assembler.CozinhaModelAssembler;
 import com.souza.souzafood.api.model.CozinhaModel;
+import com.souza.souzafood.api.model.input.CozinhaInput;
 import com.souza.souzafood.domain.model.Cozinha;
-import com.souza.souzafood.domain.model.input.CozinhaInput;
 import com.souza.souzafood.domain.repository.CozinhaRepository;
 import com.souza.souzafood.domain.service.CadastroCozinhaService;
 

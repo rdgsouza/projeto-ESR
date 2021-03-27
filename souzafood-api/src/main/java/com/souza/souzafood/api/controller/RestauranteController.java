@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.souza.souzafood.api.assembler.RestauranteInputDisassembler;
 import com.souza.souzafood.api.assembler.RestauranteModelAssembler;
 import com.souza.souzafood.api.model.RestauranteModel;
+import com.souza.souzafood.api.model.input.RestauranteInput;
 import com.souza.souzafood.domain.exception.CozinhaNaoEncontradaException;
 import com.souza.souzafood.domain.exception.NegocioException;
 import com.souza.souzafood.domain.model.Restaurante;
-import com.souza.souzafood.domain.model.input.RestauranteInput;
 import com.souza.souzafood.domain.repository.RestauranteRepository;
 import com.souza.souzafood.domain.service.CadastroRestauranteService;
 
