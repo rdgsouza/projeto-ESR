@@ -21,6 +21,7 @@ import com.souza.souzafood.api.assembler.RestauranteInputDisassembler;
 import com.souza.souzafood.api.assembler.RestauranteModelAssembler;
 import com.souza.souzafood.api.model.RestauranteModel;
 import com.souza.souzafood.api.model.input.RestauranteInput;
+import com.souza.souzafood.domain.exception.CidadeNaoEncontradaException;
 import com.souza.souzafood.domain.exception.CozinhaNaoEncontradaException;
 import com.souza.souzafood.domain.exception.NegocioException;
 import com.souza.souzafood.domain.model.Restaurante;
@@ -65,7 +66,7 @@ public class RestauranteController {
 			Restaurante restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
 			
 			return restauranteModelAssembler.toModel(cadastroRestaurante.salvar(restaurante));
-		} catch (CozinhaNaoEncontradaException e) {
+		} catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
 	}
@@ -84,7 +85,7 @@ public class RestauranteController {
 //					"endereco", "dataCadastro", "produto");
  
 			return restauranteModelAssembler.toModel(cadastroRestaurante.salvar(restauranteAtual));
-		} catch (CozinhaNaoEncontradaException e) {
+		} catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
 	}

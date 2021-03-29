@@ -1,9 +1,11 @@
 package com.souza.souzafood.core.modelmapper;
 
-
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import com.souza.souzafood.api.model.EnderecoModel;
+import com.souza.souzafood.domain.model.Endereco;
 
 @Configuration
 public class ModelMapperConfig {
@@ -19,7 +21,13 @@ public class ModelMapperConfig {
 //		modelMapper.createTypeMap(Restaurante.class, RestauranteModel.class)
 //			.addMapping(Restaurante::getTaxaFrete, RestauranteModel::setPrecoFrete);
 		
+	var enderecoToEnderecoModelTypeMap = modelMapper.createTypeMap(Endereco.class, EnderecoModel.class);
+		
+		   enderecoToEnderecoModelTypeMap.<String>addMapping(
+				  src -> src.getCidade().getEstado().getNome(),
+				  (enderecoModelDest, value) -> enderecoModelDest.getCidade().setEstado(value));
+				
 		return modelMapper;
 	}
-	
+
 }
