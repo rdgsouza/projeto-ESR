@@ -24,29 +24,39 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 public class Usuario {
-  
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @EqualsAndHashCode.Include
-  @Id
-  private Long id;
-  
-  @Column(nullable = false)
-  private String nome;
-  
-  @Column(nullable = false)
-  private String email;
-  
-  @Column(nullable = false)
-  private String senha;
-  
-  @CreationTimestamp
-  @Column(nullable = false, name = "data_cadastro", columnDefinition = "datetime")
-  @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
-  private OffsetDateTime dataCadastro;
-  
-  @ManyToMany
-  @JoinTable(name = "usuario_grupo",
-	         joinColumns = @JoinColumn(name = "usuario_id"),
-	         inverseJoinColumns = @JoinColumn(name = "grupo_id"))
-  private List<Grupo> grupos = new ArrayList<>(); 
+
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@EqualsAndHashCode.Include
+	@Id
+	private Long id;
+
+	@Column(nullable = false)
+	private String nome;
+
+	@Column(nullable = false)
+	private String email;
+
+	@Column(nullable = false)
+	private String senha;
+
+	@CreationTimestamp
+	@Column(nullable = false, name = "data_cadastro",
+	columnDefinition = "datetime")
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+	private OffsetDateTime dataCadastro;
+
+	@ManyToMany
+	@JoinTable(name = "usuario_grupo", 
+	joinColumns = @JoinColumn(name = "usuario_id"),
+	inverseJoinColumns = @JoinColumn(name = "grupo_id"))
+	private List<Grupo> grupos = new ArrayList<>();
+
+	public boolean senhaCoincideCom(String senha) {
+		return getSenha().equals(senha);
+	}
+
+	public boolean senhaNaoCoincideCom(String senha) {
+		return !senhaCoincideCom(senha);
+	}
+
 }
