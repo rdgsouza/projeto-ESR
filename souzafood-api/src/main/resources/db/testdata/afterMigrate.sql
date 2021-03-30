@@ -80,10 +80,10 @@ insert into souzafood.grupo_permissao (grupo_id, permissao_id) values (2, 1), (2
 insert into souzafood.grupo_permissao (grupo_id, permissao_id) values (3, 1), (3, 2), (3, 3),(3, 4);
 insert into souzafood.grupo_permissao (grupo_id, permissao_id) values (4, 1), (4, 3);
 
-insert into souzafood.usuario (id, data_cadastro, email, nome, senha) values (1, utc_timestamp, 'rdsouza.c@gmail.com', 'Rodrigo Carneiro de Souza', '123456');
-insert into souzafood.usuario (id, data_cadastro, email, nome, senha) values (2, utc_timestamp, 'jose_rodrigues@gmail.com', 'José Rodrigues', '654321');
-insert into souzafood.usuario (id, data_cadastro, email, nome, senha) values (3, utc_timestamp, 'maria_neves@gmail.com', 'Maria das Neves', '456321');
-insert into souzafood.usuario (id, data_cadastro, email, nome, senha) values (4, utc_timestamp, 'joao_silva.c@gmail.com', 'João Silva', '987654');
+insert into souzafood.usuario (id, data_cadastro, email, nome, senha) values (1, utc_timestamp, 'rdsouza.c@gmail.com', 'Rodrigo Carneiro de Souza', '123');
+insert into souzafood.usuario (id, data_cadastro, email, nome, senha) values (2, utc_timestamp, 'jose_rodrigues@gmail.com', 'José Rodrigues', '123');
+insert into souzafood.usuario (id, data_cadastro, email, nome, senha) values (3, utc_timestamp, 'maria_neves@gmail.com', 'Maria das Neves', '123');
+insert into souzafood.usuario (id, data_cadastro, email, nome, senha) values (4, utc_timestamp, 'joao_silva.c@gmail.com', 'João Silva', '123');
 
 insert into souzafood.usuario_grupo (usuario_id, grupo_id) values (1, 1);
 insert into souzafood.usuario_grupo (usuario_id, grupo_id) values (2, 2);
