@@ -28,8 +28,8 @@ public class CadastroFormaPagamentoService {
     @Transactional
     public void excluir(Long formaPagamentoId) {
         try {
+        	 formaPagamentoRepository.flush();
             formaPagamentoRepository.deleteById(formaPagamentoId);
-            formaPagamentoRepository.flush();
             
         } catch (EmptyResultDataAccessException e) {
             throw new FormaPagamentoNaoEncontradaException(formaPagamentoId);

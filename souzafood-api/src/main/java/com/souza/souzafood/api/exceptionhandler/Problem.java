@@ -3,6 +3,7 @@ package com.souza.souzafood.api.exceptionhandler;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -12,12 +13,13 @@ import lombok.Getter;
 @JsonInclude(Include.NON_NULL)
 @Getter
 @Builder
-public class Problem {
+public class Problem {				
 
 	private Integer status;
 	private String type;
 	private String title;
 	private String detail;
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX") 
 	private OffsetDateTime timestamp;
 	
 	private String userMessage;
