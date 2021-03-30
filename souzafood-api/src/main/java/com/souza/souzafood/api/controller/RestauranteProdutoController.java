@@ -72,7 +72,7 @@ public class RestauranteProdutoController {
         produto = cadastroProduto.salvar(produto);
         
         return produtoModelAssembler.toModel(produto);
-    }
+    } 
     
     @PutMapping("/{produtoId}")
     public ProdutoModel atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId,
