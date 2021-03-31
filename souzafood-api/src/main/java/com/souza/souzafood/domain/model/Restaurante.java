@@ -65,6 +65,8 @@ public class Restaurante {
 
 	private Boolean ativo = Boolean.TRUE;
 
+	private Boolean aberto = Boolean.FALSE;
+
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
 	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX") // Configuraramos a formatação para não
@@ -76,12 +78,12 @@ public class Restaurante {
 
 	@UpdateTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")	
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
 	private OffsetDateTime dataAtualizacao;
 
 	@ManyToMany // (fetch = FetchType.EAGER)
-	@JoinTable(name = "restaurante_forma_pagamento", 
-	joinColumns = @JoinColumn(name = "restaurante_id"), 
+	@JoinTable(name = "restaurante_forma_pagamento",
+	joinColumns = @JoinColumn(name = "restaurante_id"),
 	inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
 	private Set<FormaPagamento> formasPagamento = new HashSet<>();
 
@@ -95,7 +97,15 @@ public class Restaurante {
 	public void inativar() {
 		setAtivo(false);
 	}
-	
+
+	public void abrir() {
+		setAberto(true);
+	}
+
+	public void fechar() {
+		setAberto(false);
+	}
+
 	public boolean removerFormaPagamento(FormaPagamento formaPagamento) {
 		return getFormasPagamento().remove(formaPagamento);
 	}
@@ -103,5 +113,5 @@ public class Restaurante {
 	public boolean adicionarFormaPagamento(FormaPagamento formaPagamento) {
 		return getFormasPagamento().add(formaPagamento);
 	}
-	
- }
+
+}
