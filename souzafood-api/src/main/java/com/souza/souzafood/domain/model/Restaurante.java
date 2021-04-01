@@ -28,7 +28,8 @@ import com.souza.souzafood.core.validation.ValorZeroIncluiDescricao;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@ValorZeroIncluiDescricao(valorField = "taxaFrete", descricaoField = "nome", descricaoObrigatoria = "Frete Grátis")
+@ValorZeroIncluiDescricao(valorField = "taxaFrete", descricaoField = "nome",
+descricaoObrigatoria = "Frete Grátis")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -87,7 +88,11 @@ public class Restaurante {
 	inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
 	private Set<FormaPagamento> formasPagamento = new HashSet<>();
 
-	@OneToMany(mappedBy = "restaurante")
+	@OneToMany(mappedBy = "restaurante") //Caso queira que o efeito seja em cascada adicione o
+//	, cascade = CascadeType.ALL Quando se usa o CascadeType.ALL, significa que qualquer alteração na entidade Restaurante, deva refletir
+//	também nos seus produtos.
+//	Então, neste caso, se você remover um Restaurante que tem 4 produtos associados a ele, os 4 produtos
+//	serão removidos primeiro, e depois o própria Restaurante. Isso vale para criação, remoção, atualização, etc.	
 	private List<Produto> produtos = new ArrayList<>();
 
 	public void ativar() {

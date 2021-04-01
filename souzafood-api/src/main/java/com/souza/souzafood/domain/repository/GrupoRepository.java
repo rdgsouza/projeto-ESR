@@ -7,5 +7,5 @@ import com.souza.souzafood.domain.model.Grupo;
 
 @Repository
 public interface GrupoRepository extends JpaRepository<Grupo, Long> {
-
+	
 }
