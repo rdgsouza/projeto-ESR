@@ -13,8 +13,10 @@ public class EnderecoInput {
 
 	@NotBlank
 	private String cep;
+	
 	@NotBlank
 	private String logradouro;
+	
 	@NotBlank
 	private String numero;
 
