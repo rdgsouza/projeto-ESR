@@ -23,13 +23,13 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.souza.souzafood.core.validation.ValorZeroIncluiDescricao;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@ValorZeroIncluiDescricao(valorField = "taxaFrete", descricaoField = "nome",
-descricaoObrigatoria = "Frete Grátis")
+//@ValorZeroIncluiDescricao(valorField = "taxaFrete",
+//descricaoField = "nome",
+//descricaoObrigatoria = "Frete Grátis")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -83,17 +83,23 @@ public class Restaurante {
 	private OffsetDateTime dataAtualizacao;
 
 	@ManyToMany // (fetch = FetchType.EAGER)
-	@JoinTable(name = "restaurante_forma_pagamento",
-	joinColumns = @JoinColumn(name = "restaurante_id"),
+	@JoinTable(name = "restaurante_forma_pagamento", 
+	joinColumns = @JoinColumn(name = "restaurante_id"), 
 	inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
 	private Set<FormaPagamento> formasPagamento = new HashSet<>();
 
-	@OneToMany(mappedBy = "restaurante") //Caso queira que o efeito seja em cascada adicione o
+	@OneToMany(mappedBy = "restaurante") // Caso queira que o efeito seja em cascada adicione o
 //	, cascade = CascadeType.ALL Quando se usa o CascadeType.ALL, significa que qualquer alteração na entidade Restaurante, deva refletir
 //	também nos seus produtos.
 //	Então, neste caso, se você remover um Restaurante que tem 4 produtos associados a ele, os 4 produtos
 //	serão removidos primeiro, e depois o própria Restaurante. Isso vale para criação, remoção, atualização, etc.	
 	private List<Produto> produtos = new ArrayList<>();
+
+	@ManyToMany
+	@JoinTable(name = "restaurante_usuario_responsavel", 
+	joinColumns = @JoinColumn(name = "restaurante_id"), 
+	inverseJoinColumns = @JoinColumn(name = "usuario_id"))
+	private Set<Usuario> responsaveis = new HashSet<>();
 
 	public void ativar() {
 		setAtivo(true);
@@ -119,4 +125,12 @@ public class Restaurante {
 		return getFormasPagamento().add(formaPagamento);
 	}
 
+	public boolean removerResponsavel(Usuario usuario) {
+		return getResponsaveis().remove(usuario);
+	}
+
+	public boolean adicionarResponsavel(Usuario usuario) {
+		return getResponsaveis().add(usuario);
+	}
+	
 }

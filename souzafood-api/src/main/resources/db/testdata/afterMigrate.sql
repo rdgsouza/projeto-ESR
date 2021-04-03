@@ -10,6 +10,7 @@ truncate souzafood.permissao;
 truncate souzafood.produto;
 truncate souzafood.restaurante;
 truncate souzafood.restaurante_forma_pagamento;
+truncate souzafood.restaurante_usuario_responsavel;
 truncate souzafood.usuario;
 truncate souzafood.usuario_grupo;
 
@@ -85,10 +86,16 @@ insert into souzafood.usuario (id, data_cadastro, email, nome, senha) values (1,
 insert into souzafood.usuario (id, data_cadastro, email, nome, senha) values (2, utc_timestamp, 'jose_rodrigues@gmail.com', 'José Rodrigues', '123');
 insert into souzafood.usuario (id, data_cadastro, email, nome, senha) values (3, utc_timestamp, 'maria_neves@gmail.com', 'Maria das Neves', '123');
 insert into souzafood.usuario (id, data_cadastro, email, nome, senha) values (4, utc_timestamp, 'joao_silva.c@gmail.com', 'João Silva', '123');
+insert into souzafood.usuario (id, data_cadastro, email, nome, senha) values (5, utc_timestamp, 'manoel.lm@gmail.com', 'Manoel Lima', '123');
 
 insert into souzafood.usuario_grupo (usuario_id, grupo_id) values (1, 1);
+insert into souzafood.usuario_grupo (usuario_id, grupo_id) values (1, 2);
+insert into souzafood.usuario_grupo (usuario_id, grupo_id) values (1, 3);
 insert into souzafood.usuario_grupo (usuario_id, grupo_id) values (2, 2);
 insert into souzafood.usuario_grupo (usuario_id, grupo_id) values (2, 3);
+insert into souzafood.usuario_grupo (usuario_id, grupo_id) values (2, 4);
 insert into souzafood.usuario_grupo (usuario_id, grupo_id) values (3, 3);
+insert into souzafood.usuario_grupo (usuario_id, grupo_id) values (3, 4);
 insert into souzafood.usuario_grupo (usuario_id, grupo_id) values (4, 4);
 
+insert into restaurante_usuario_responsavel (restaurante_id, usuario_id) values (1, 5), (3, 5);

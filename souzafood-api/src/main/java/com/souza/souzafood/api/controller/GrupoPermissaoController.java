@@ -24,18 +24,15 @@ public class GrupoPermissaoController {
 	@Autowired
 	private CadastroGrupoService cadastroGrupo;
 	
-	
 	@Autowired
 	private PermissaoModelAssembler permissaoModelAssembler;
 	    
-	
 	@GetMapping
 	public List<PermissaoModel> listar(@PathVariable Long grupoId) {
 		Grupo grupo = cadastroGrupo.buscarOuFalhar(grupoId);
 		
 		return permissaoModelAssembler.toCollectionModel(grupo.getPermissoes());
 	}
-	
 	
 	@DeleteMapping("/{permissaoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)

@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.souza.souzafood.domain.exception.NegocioException;
 import com.souza.souzafood.domain.exception.UsuarioNaoEncontradoException;
+import com.souza.souzafood.domain.model.Grupo;
 import com.souza.souzafood.domain.model.Usuario;
 import com.souza.souzafood.domain.repository.UsuarioRepository;
 
@@ -16,6 +17,9 @@ public class CadastroUsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+    
+    @Autowired
+	private CadastroGrupoService cadastroGrupo;
     
     @Transactional
     public Usuario salvar(Usuario usuario) {
@@ -42,6 +46,23 @@ public class CadastroUsuarioService {
         
         usuario.setSenha(novaSenha);
     }
+    
+	@Transactional
+	public void desassociarPermissao(Long usuarioId, Long grupoId) {
+		Usuario usuario = buscarOuFalhar(usuarioId);
+		Grupo grupo = cadastroGrupo.buscarOuFalhar(grupoId);
+
+		usuario.removerGrupo(grupo);
+	}
+
+	@Transactional
+	public void associarPermissao(Long usuarioId, Long grupoId) {
+		Usuario usuario = buscarOuFalhar(usuarioId);
+		Grupo grupo = cadastroGrupo.buscarOuFalhar(grupoId);
+
+		usuario.adicionarGrupo(grupo);
+	}
+    
 
     public Usuario buscarOuFalhar(Long usuarioId) {
         return usuarioRepository.findById(usuarioId)
