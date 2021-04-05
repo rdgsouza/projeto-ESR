@@ -1,3 +1,4 @@
+
 set foreign_key_checks = 0;
 
 truncate souzafood.cidade;
@@ -18,98 +19,98 @@ truncate souzafood.item_pedido;
 
 set foreign_key_checks = 1;
 
-alter table souzafood.cidade auto_increment = 1;
-alter table souzafood.cozinha auto_increment = 1;
-alter table souzafood.estado auto_increment = 1;
-alter table souzafood.forma_pagamento auto_increment = 1;
-alter table souzafood.grupo auto_increment = 1;
-alter table souzafood.permissao auto_increment = 1;
-alter table souzafood.produto auto_increment = 1;
-alter table souzafood.restaurante auto_increment = 1;
-alter table souzafood.usuario auto_increment = 1;
+alter table cidade auto_increment = 1;
+alter table cozinha auto_increment = 1;
+alter table estado auto_increment = 1;
+alter table forma_pagamento auto_increment = 1;
+alter table grupo auto_increment = 1;
+alter table permissao auto_increment = 1;
+alter table produto auto_increment = 1;
+alter table restaurante auto_increment = 1;
+alter table usuario auto_increment = 1;
 
-insert into souzafood.cozinha (id, nome) values (1, 'Tailandesa');
-insert into souzafood.cozinha (id, nome) values (2, 'Indiana');
-insert into souzafood.cozinha (id, nome) values (3, 'Argentina');
-insert into souzafood.cozinha (id, nome) values (4, 'Brasileira');
+insert into cozinha (id, nome) values (1, 'Tailandesa');
+insert into cozinha (id, nome) values (2, 'Indiana');
+insert into cozinha (id, nome) values (3, 'Argentina');
+insert into cozinha (id, nome) values (4, 'Brasileira');
 
-insert into souzafood.estado (id, nome) values (1, 'Minas Gerais');
-insert into souzafood.estado (id, nome) values (2, 'São Paulo');
-insert into souzafood.estado (id, nome) values (3, 'Ceará');
+insert into estado (id, nome) values (1, 'Minas Gerais');
+insert into estado (id, nome) values (2, 'São Paulo');
+insert into estado (id, nome) values (3, 'Ceará');
 
-insert into souzafood.cidade (id, nome, estado_id) values (1, 'Uberlândia', 1);
-insert into souzafood.cidade (id, nome, estado_id) values (2, 'Belo Horizonte', 1);
-insert into souzafood.cidade (id, nome, estado_id) values (3, 'São Paulo', 2);
-insert into souzafood.cidade (id, nome, estado_id) values (4, 'Campinas', 2);
-insert into souzafood.cidade (id, nome, estado_id) values (5, 'Fortaleza', 3);
+insert into cidade (id, nome, estado_id) values (1, 'Uberlândia', 1);
+insert into cidade (id, nome, estado_id) values (2, 'Belo Horizonte', 1);
+insert into cidade (id, nome, estado_id) values (3, 'São Paulo', 2);
+insert into cidade (id, nome, estado_id) values (4, 'Campinas', 2);
+insert into cidade (id, nome, estado_id) values (5, 'Fortaleza', 3);
 
 insert into restaurante (id, nome, taxa_frete, cozinha_id, data_cadastro, data_atualizacao, ativo, aberto, endereco_cidade_id, endereco_cep, endereco_logradouro, endereco_numero, endereco_bairro) values (1, 'Thai Gourmet', 10, 1, utc_timestamp, utc_timestamp, true, true, 1, '38400-999', 'Rua João Pinheiro', '1000', 'Centro');
 insert into restaurante (id, nome, taxa_frete, cozinha_id, data_cadastro, data_atualizacao, ativo, aberto) values (2, 'Thai Delivery', 9.50, 1, utc_timestamp, utc_timestamp, true, true);
 insert into restaurante (id, nome, taxa_frete, cozinha_id, data_cadastro, data_atualizacao, ativo, aberto) values (3, 'Tuk Tuk Comida Indiana', 15, 2, utc_timestamp, utc_timestamp, true, true);
 insert into restaurante (id, nome, taxa_frete, cozinha_id, data_cadastro, data_atualizacao, ativo, aberto) values (4, 'Java Steakhouse', 12, 3, utc_timestamp, utc_timestamp, true, true);
 insert into restaurante (id, nome, taxa_frete, cozinha_id, data_cadastro, data_atualizacao, ativo, aberto) values (5, 'Lanchonete do Tio Sam', 11, 4, utc_timestamp, utc_timestamp, true, true);
-insert into restaurante (id, nome, taxa_frete, cozinha_id, data_cadastro, data_atualizacao, ativo, aberto) values (6, 'Bar da Maria', 6, 4, utc_timestamp, utc_timestamp, true, true);                       
+insert into restaurante (id, nome, taxa_frete, cozinha_id, data_cadastro, data_atualizacao, ativo, aberto) values (6, 'Bar da Maria', 6, 4, utc_timestamp, utc_timestamp, true, true);
+
+insert into forma_pagamento (id, descricao) values (1, 'Cartão de crédito');
+insert into forma_pagamento (id, descricao) values (2, 'Cartão de débito');
+insert into forma_pagamento (id, descricao) values (3, 'Dinheiro');
+
+insert into permissao (id, nome, descricao) values (1, 'CONSULTAR_COZINHAS', 'Permite consultar cozinhas');
+insert into permissao (id, nome, descricao) values (2, 'EDITAR_COZINHAS', 'Permite editar cozinhas');
+
+insert into restaurante_forma_pagamento (restaurante_id, forma_pagamento_id) values (1, 1), (1, 2), (1, 3), (2, 3), (3, 2), (3, 3), (4, 1), (4, 2), (5, 1), (5, 2), (6, 3);
+
+insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('Porco com molho agridoce', 'Deliciosa carne suína ao molho especial', 78.90, 1, 1);
+insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('Camarão tailandês', '16 camarões grandes ao molho picante', 110, 1, 1);
+
+insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('Salada picante com carne grelhada', 'Salada de folhas com cortes finos de carne bovina grelhada e nosso molho especial de pimenta vermelha', 87.20, 1, 2);
+
+insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('Garlic Naan', 'Pão tradicional indiano com cobertura de alho', 21, 1, 3);
+insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('Murg Curry', 'Cubos de frango preparados com molho curry e especiarias', 43, 1, 3);
+
+insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('Bife Ancho', 'Corte macio e suculento, com dois dedos de espessura, retirado da parte dianteira do contrafilé', 79, 1, 4);
+insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('T-Bone', 'Corte muito saboroso, com um osso em formato de T, sendo de um lado o contrafilé e do outro o filé mignon', 89, 1, 4);
+
+insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('Sanduíche X-Tudo', 'Sandubão com muito queijo, hamburger bovino, bacon, ovo, salada e maionese', 19, 1, 5);
+
+insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('Espetinho de Cupim', 'Acompanha farinha, mandioca e vinagrete', 8, 1, 6);
 
 
-insert into souzafood.produto (id, nome, descricao, preco, ativo, restaurante_id) values (1, 'Porco com molho agridoce', 'Deliciosa carne suína ao molho especial', 78.90, 1, 1);
-insert into souzafood.produto (id, nome, descricao, preco, ativo, restaurante_id) values (2, 'Camarão tailandês', '16 camarões grandes ao molho picante', 110, 1, 1);
-insert into souzafood.produto (id, nome, descricao, preco, ativo, restaurante_id) values (3, 'Salada picante com carne grelhada', 'Salada de folhas com cortes finos de carne bovina grelhada e nosso molho especial de pimenta vermelha', 87.20, 1, 2);
-insert into souzafood.produto (id, nome, descricao, preco, ativo, restaurante_id) values (4, 'Garlic Naan', 'Pão tradicional indiano com cobertura de alho', 21, 1, 3);
-insert into souzafood.produto (id, nome, descricao, preco, ativo, restaurante_id) values (5, 'Murg Curry', 'Cubos de frango preparados com molho curry e especiarias', 43, 1, 3);
-insert into souzafood.produto (id, nome, descricao, preco, ativo, restaurante_id) values (6, 'Bife Ancho', 'Corte macio e suculento, com dois dedos de espessura, retirado da parte dianteira do contrafilé', 79, 1, 4);
-insert into souzafood.produto (id, nome, descricao, preco, ativo, restaurante_id) values (7, 'T-Bone', 'Corte muito saboroso, com um osso em formato de T, sendo de um lado o contrafilé e do outro o filé mignon', 89, 1, 4);
-insert into souzafood.produto (id, nome, descricao, preco, ativo, restaurante_id) values (8, 'Sanduíche X-Tudo', 'Sandubão com muito queijo, hamburger bovino, bacon, ovo, salada e maionese', 19, 1, 5);
-insert into souzafood.produto (id, nome, descricao, preco, ativo, restaurante_id) values (9, 'Espetinho de Cupim', 'Acompanha farinha, mandioca e vinagrete', 8, 1, 6);
+insert into grupo (id, nome) values (1, 'Gerente'), (2, 'Vendedor'), (3, 'Secretária'), (4, 'Cadastrador');
 
-insert into souzafood.forma_pagamento (id, descricao) values (1, 'Cartão de crédito');
-insert into souzafood.forma_pagamento (id, descricao) values (2, 'Cartão de débito');
-insert into souzafood.forma_pagamento (id, descricao) values (3, 'Dinheiro');
+insert into grupo_permissao (grupo_id, permissao_id) values (1, 1), (1, 2), (2, 1), (2, 2), (3, 1); 
 
-insert into souzafood.restaurante_forma_pagamento (restaurante_id, forma_pagamento_id) values (1, 1), (1, 2), (1, 3), (2, 3), (3, 2), (3, 3), (4, 1), (4, 2), (5, 1), (5, 2);
+insert into usuario (id, nome, email, senha, data_cadastro) values
+(1, 'Rodrigo Souza', 'rodrigo.ger@souzafood.com', '123', utc_timestamp),
+(2, 'Maria Joaquina', 'maria.vnd@souzafood.com', '123', utc_timestamp),
+(3, 'José Souza', 'jose.aux@souzafood.com', '123', utc_timestamp),
+(4, 'Sebastião Martins', 'sebastiao.cad@souzafood.com', '123', utc_timestamp),
+(5, 'Manoel Lima', 'manoel.loja@gmail.com', '123', utc_timestamp);
 
-insert into souzafood.permissao (id, nome, descricao) values (1, 'CONSULTAR_COZINHAS', 'Permite consultar cozinhas');
-insert into souzafood.permissao (id, nome, descricao) values (2, 'EDITAR_COZINHAS', 'Permite editar cozinhas');
-insert into souzafood.permissao (id, nome, descricao) values (3, 'CONSULTAR_RESTAURANTES', 'Permite consultar restaurantes');
-insert into souzafood.permissao (id, nome, descricao) values (4, 'EDITAR_RESTAURANTES', 'Permite editar restaurantes');
-insert into souzafood.permissao (id, nome, descricao) values (5, 'CONSULTAR_PRODUTOS', 'Permite consultar produtos');
-insert into souzafood.permissao (id, nome, descricao) values (6, 'EDITAR_PRODUTOS', 'Permite editar produtos');
-
-insert into souzafood.grupo (id, nome) values (1, 'Administrador');
-insert into souzafood.grupo (id, nome) values (2, 'Tático');
-insert into souzafood.grupo (id, nome) values (3, 'Operacional');
-insert into souzafood.grupo (id, nome) values (4, 'Auxiliar');
-
-insert into souzafood.grupo_permissao (grupo_id, permissao_id) values (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6); 
-insert into souzafood.grupo_permissao (grupo_id, permissao_id) values (2, 1), (2, 2), (2, 3),(2, 4);
-insert into souzafood.grupo_permissao (grupo_id, permissao_id) values (3, 1), (3, 2), (3, 3),(3, 4);
-insert into souzafood.grupo_permissao (grupo_id, permissao_id) values (4, 1), (4, 3);
-
-insert into souzafood.usuario (id, data_cadastro, email, nome, senha) values (1, utc_timestamp, 'rdsouza.c@gmail.com', 'Rodrigo Carneiro de Souza', '123');
-insert into souzafood.usuario (id, data_cadastro, email, nome, senha) values (2, utc_timestamp, 'jose_rodrigues@gmail.com', 'José Rodrigues', '123');
-insert into souzafood.usuario (id, data_cadastro, email, nome, senha) values (3, utc_timestamp, 'maria_neves@gmail.com', 'Maria das Neves', '123');
-insert into souzafood.usuario (id, data_cadastro, email, nome, senha) values (4, utc_timestamp, 'joao_silva.c@gmail.com', 'João Silva', '123');
-insert into souzafood.usuario (id, data_cadastro, email, nome, senha) values (5, utc_timestamp, 'manoel.lm@gmail.com', 'Manoel Lima', '123');
-
-insert into souzafood.usuario_grupo (usuario_id, grupo_id) values (1, 1);
-insert into souzafood.usuario_grupo (usuario_id, grupo_id) values (1, 2);
-insert into souzafood.usuario_grupo (usuario_id, grupo_id) values (1, 3);
-insert into souzafood.usuario_grupo (usuario_id, grupo_id) values (2, 2);
-insert into souzafood.usuario_grupo (usuario_id, grupo_id) values (2, 3);
-insert into souzafood.usuario_grupo (usuario_id, grupo_id) values (2, 4);
-insert into souzafood.usuario_grupo (usuario_id, grupo_id) values (3, 3);
-insert into souzafood.usuario_grupo (usuario_id, grupo_id) values (3, 4);
-insert into souzafood.usuario_grupo (usuario_id, grupo_id) values (4, 4);
+insert into usuario_grupo (usuario_id, grupo_id) values (1, 1), (1, 2), (2, 2);
 
 insert into restaurante_usuario_responsavel (restaurante_id, usuario_id) values (1, 5), (3, 5);
 
-insert into pedido (id, restaurante_id, usuario_cliente_id, forma_pagamento_id, endereco_cidade_id, endereco_cep, endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro, status, data_criacao, subtotal, taxa_frete, valor_total) values (1, 1, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil', 'CRIADO', utc_timestamp, 298.90, 10, 308.90);
 
-insert into item_pedido (id, pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao) values (1, 1, 1, 1, 78.9, 78.9, null);
+insert into pedido (id, restaurante_id, usuario_cliente_id, forma_pagamento_id, endereco_cidade_id, endereco_cep, 
+                    endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro,
+	                status, data_criacao, subtotal, taxa_frete, valor_total)
+values (1, 1, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil',
+        'CRIADO', utc_timestamp, 298.90, 10, 308.90);
 
-insert into item_pedido (id, pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao) values (2, 1, 2, 2, 110, 220, 'Menos picante, por favor');
+insert into item_pedido (id, pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao)
+values (1, 1, 1, 1, 78.9, 78.9, null);
 
-insert into pedido (id, restaurante_id, usuario_cliente_id, forma_pagamento_id, endereco_cidade_id, endereco_cep, endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro, status, data_criacao, subtotal, taxa_frete, valor_total) values (2, 4, 2, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro', 'CRIADO', utc_timestamp, 79, 0, 79);
+insert into item_pedido (id, pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao)
+values (2, 1, 2, 2, 110, 220, 'Menos picante, por favor');
 
-insert into item_pedido (id, pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao) values (3, 2, 6, 1, 79, 79, 'Ao ponto');
 
+insert into pedido (id, restaurante_id, usuario_cliente_id, forma_pagamento_id, endereco_cidade_id, endereco_cep, 
+                    endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro,
+	                status, data_criacao, subtotal, taxa_frete, valor_total)
+values (2, 4, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
+        'CRIADO', utc_timestamp, 79, 0, 79);
+
+insert into item_pedido (id, pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao)
+values (3, 2, 6, 1, 79, 79, 'Ao ponto');
 

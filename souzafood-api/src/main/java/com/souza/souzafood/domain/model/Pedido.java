@@ -9,6 +9,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -56,7 +57,14 @@ public class Pedido {
 	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
 	private OffsetDateTime dataEntrega;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)//Alteramos a estratégia de fetch para lazy porque nem sempre
+	//nos vamos precisar da forma de pagamento na consulta por exemplo quando for consultar todas os
+	//pedidos no não colocamos na entidade PedidoResumoModel para trazer as formas de pagamentos pois
+	//é uma entidade que é usado para uma consulta de collection resource colocmos a forma de pagamento
+	//apenas na entidade PedidoModel que é usada para consulta sigleton resorce.
+	//Sendo assim podemos colocar a estratégia fetch LAZY
+	//Caso tenha dúvida veja as aulas: https://www.algaworks.com/aulas/1904/entendendo-o-lazy-loading
+	//e https://www.algaworks.com/aulas/2026/otimizando-a-query-de-pedidos-e-retornando-model-resumido-na-listagem
 	@JoinColumn(nullable = false)
 	private FormaPagamento formaPagamento;
 
