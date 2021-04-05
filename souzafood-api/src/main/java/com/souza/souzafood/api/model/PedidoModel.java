@@ -1,14 +1,8 @@
-package com.souza.souzafood.api.model.input;
+package com.souza.souzafood.api.model;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
-
-import com.souza.souzafood.api.model.EnderecoModel;
-import com.souza.souzafood.api.model.FormaPagamentoModel;
-import com.souza.souzafood.api.model.ItemPedidoModel;
-import com.souza.souzafood.api.model.RestauranteResumoModel;
-import com.souza.souzafood.api.model.UsuarioModel;
 
 import lombok.Getter;
 import lombok.Setter;
