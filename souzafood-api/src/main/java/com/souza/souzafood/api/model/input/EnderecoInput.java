@@ -24,7 +24,7 @@ public class EnderecoInput {
 
 	@NotBlank
 	private String bairro;
-
+ 
 	@Valid
 	@NotNull
 	private CidadeIdInput cidade;

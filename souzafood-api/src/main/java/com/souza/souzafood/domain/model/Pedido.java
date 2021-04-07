@@ -5,6 +5,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -74,11 +75,10 @@ public class Pedido {
 
 	@ManyToOne
 	@JoinColumn(name = "usuario_cliente_id", nullable = false)
-	private Usuario cliente;
+	private Usuario cliente; 
 
-	@OneToMany(mappedBy = "pedido")
+	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
 	private List<ItemPedido> itens = new ArrayList<>();
-
 //	OBS*** No script de migração V007__criar-tabelas-pedido-item-pedido.sql temos uma chave única na 
 //	tabela item_pedido:  unique key uk_item_pedido_produto (pedido_id, produto_id)
 //	Essa chave única é para garantir que o usuário na hora do cadastro do pedido não haja repetição 
@@ -89,18 +89,26 @@ public class Pedido {
 //	consistência nos dados, o que facilitaria, por exemplo, a realização de uma auditoria no sistema.
 //  fonte resposta de Alexandre Moraes: https://www.algaworks.com/forum/topicos/83459/duvida-no-script-sql-do-conteudo-de-apoio#87766
 
+	
 	public void calcularValorTotal() {
-		this.subtotal = getItens().stream()
-		.map(item -> item.getPrecoTotal())
-		.reduce(BigDecimal.ZERO, BigDecimal::add);
-		this.valorTotal = this.subtotal.add(this.taxaFrete);
+	getItens().forEach(ItemPedido::calcularPrecoTotal);//Nesta linha é feito um forEach nos itens que estão no Pedido e pra cada item fazemos a multiplicação do valor unitário x quantidade com isso temos o preço total de cada item
+		this.subtotal = getItens().stream() //Nesta linha o conjunto de itens é transformado em um stream de dados, que será percorrido em sua totalidade.
+		.map(item -> item.getPrecoTotal()) //Nesta linha são extraídos todos os preços totais de cada item contido no pedido e é criado um vetor com apenas estes valores
+		.reduce(BigDecimal.ZERO, BigDecimal::add);//Neste ponto é feita a agregação dos dados com o método reduce. O primeiro parâmetro é o valor inicial (BigDecimal.ZERO) e o segundo é um callback para o método add definido na classe BigDecimal.
+//Toda a operação com o stream é feita para obter o valor total do pedido considerando apenas os valores dos itens presentes nos pedidos e armazenamento do valor no atributo subtotal.
+		this.valorTotal = this.subtotal.add(this.taxaFrete);//A última linha é para definição do valor total do pedido, considerando os itens e a taxa de frete. Esta linha representa essa soma
+//É utilizado novamente o método add nessa última linha porque ele ta presente na classe-tipo BigDecimal, visto que o atributo subtotal é desse tipo. Não é adequado utilizar o operador '+' para esse tipo. 
 	}
-
-	public void definirFrete() {
-		setTaxaFrete(getRestaurante().getTaxaFrete());
-	}
-
-	public void atribuirPedidoAosItens() {
-		getItens().forEach(item -> item.setPedido(this));
+	
+	public int procuraProdutosDuplicados(List<ItemPedido> itens, Object valorProcurado){
+	    int contador = 0;
+	    if (itens != null){
+	        for (ItemPedido item : itens){
+	            if (item != null && item.equals(valorProcurado)){
+	                contador++;
+	            }
+	        }
+	    }
+	    return contador;
 	}
 }
