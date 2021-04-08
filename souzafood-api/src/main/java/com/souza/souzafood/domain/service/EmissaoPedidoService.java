@@ -99,7 +99,7 @@ public class EmissaoPedidoService {
 		} else if (itemNormalizado.getObservacao() != null && itemRepetido.getObservacao() != null) {
 			itemNormalizado.setObservacao(itemNormalizado.getObservacao() + " / " + itemRepetido.getObservacao());
 		}
-	}
+	} 
 
 	private void validarItens(Pedido pedido) {
 		pedido.getItens().forEach(item -> {
