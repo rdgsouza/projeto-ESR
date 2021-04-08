@@ -75,7 +75,8 @@ public class EmissaoPedidoService {
 
 		for (ItemPedido item : pedido.getItens()) {
 			Optional<ItemPedido> itemNormalizadoOpt = itensNormalizados.stream()
-					.filter(itemNormalizado -> itemNormalizado.getProduto().equals(item.getProduto())).findFirst();
+					.filter(itemNormalizado -> 
+					   itemNormalizado.getProduto().equals(item.getProduto())).findFirst();
 
 			itemNormalizadoOpt.ifPresentOrElse(itemNormalizado -> mesclarItens(itemNormalizado, item),
 					() -> itensNormalizados.add(item));
@@ -99,7 +100,7 @@ public class EmissaoPedidoService {
 		} else if (itemNormalizado.getObservacao() != null && itemRepetido.getObservacao() != null) {
 			itemNormalizado.setObservacao(itemNormalizado.getObservacao() + " / " + itemRepetido.getObservacao());
 		}
-	} 
+	}
 
 	private void validarItens(Pedido pedido) {
 		pedido.getItens().forEach(item -> {

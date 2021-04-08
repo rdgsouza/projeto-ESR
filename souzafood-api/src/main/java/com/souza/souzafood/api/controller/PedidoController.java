@@ -25,10 +25,10 @@ import com.souza.souzafood.domain.model.Usuario;
 import com.souza.souzafood.domain.repository.PedidoRepository;
 import com.souza.souzafood.domain.service.EmissaoPedidoService;
 
-@RestController
+@RestController 
 @RequestMapping(value = "/pedidos")
 public class PedidoController {
-
+ 
 	@Autowired
 	private PedidoRepository pedidoRepository;
 
