@@ -1,8 +1,8 @@
 package com.souza.souzafood.domain.service;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -63,7 +63,7 @@ public class EmissaoPedidoService {
 		pedido.setCliente(cliente);
 		pedido.setRestaurante(restaurante);
 		pedido.setFormaPagamento(formaPagamento);
-		
+
 		if (restaurante.naoAceitaFormaPagamento(formaPagamento)) {
 			throw new NegocioException(String.format("Forma de pagamento '%s' não é aceita por esse restaurante.",
 					formaPagamento.getDescricao()));
@@ -71,38 +71,49 @@ public class EmissaoPedidoService {
 	}
 
 	private void normalizarItens(Pedido pedido) {
-		Set<ItemPedido> itensNormalizados = new HashSet<>();
+		List<ItemPedido> itensNormalizados = new ArrayList<>();
 
 		for (ItemPedido item : pedido.getItens()) {
 			Optional<ItemPedido> itemNormalizadoOpt = itensNormalizados.stream()
-					.filter(itemNormalizado -> itemNormalizado.getProduto().equals(item.getProduto()))
-					.findFirst();
+					.filter(itemNormalizado -> itemNormalizado.getProduto().equals(item.getProduto())).findFirst();
 
-			itemNormalizadoOpt.ifPresentOrElse(
-					itemNormalizado -> mesclarItens(itemNormalizado, item),
+			itemNormalizadoOpt.ifPresentOrElse(itemNormalizado -> mesclarItens(itemNormalizado, item),
 					() -> itensNormalizados.add(item));
 		}
+
+		pedido.setItens(new ArrayList<>(itensNormalizados));
 	}
 
 	private void mesclarItens(ItemPedido itemNormalizado, ItemPedido itemRepetido) {
 		itemNormalizado.setQuantidade(itemNormalizado.getQuantidade() + itemRepetido.getQuantidade());
-		itemNormalizado.setObservacao(itemNormalizado.getObservacao() + " / " + itemRepetido.getObservacao());
+// ifs criados para pegar apenas a propiedade observacao que não estiver nula. Caso tenha duas propiedades nulas
+// vamos setar apenas um null caso as propidades estejam com dua observações ai sim vamos concatenar
+// as string das duas propiedades para ficar duas observações em uma. Já que o cliente informou a observação uma
+// vez e depois resolver adicionar o mesmo item e adicionou outra observação sendo que são os mesmos itens.		
+		if (itemNormalizado.getObservacao() == null && itemRepetido.getObservacao() != null) {
+			itemNormalizado.setObservacao(itemRepetido.getObservacao());
+		} else if (itemNormalizado.getObservacao() != null && itemRepetido.getObservacao() == null) {
+			itemNormalizado.setObservacao(itemNormalizado.getObservacao());
+		} else if (itemNormalizado.getObservacao() == null && itemRepetido.getObservacao() == null) {
+			itemNormalizado.setObservacao(null);
+		} else if (itemNormalizado.getObservacao() != null && itemRepetido.getObservacao() != null) {
+			itemNormalizado.setObservacao(itemNormalizado.getObservacao() + " / " + itemRepetido.getObservacao());
+		}
 	}
 
 	private void validarItens(Pedido pedido) {
 		pedido.getItens().forEach(item -> {
-			Produto produto = cadastroProduto.buscarOuFalhar(
-					pedido.getRestaurante().getId(), item.getProduto().getId());
-			
+			Produto produto = cadastroProduto.buscarOuFalhar(pedido.getRestaurante().getId(),
+					item.getProduto().getId());
+
 			item.setPedido(pedido);
 			item.setProduto(produto);
 			item.setPrecoUnitario(produto.getPreco());
 		});
 	}
-	
+
 	public Pedido buscarOuFalhar(Long pedidoId) {
-		return pedidoRepository.findById(pedidoId)
-			.orElseThrow(() -> new PedidoNaoEncontradoException(pedidoId));
+		return pedidoRepository.findById(pedidoId).orElseThrow(() -> new PedidoNaoEncontradoException(pedidoId));
 	}
 
 }
