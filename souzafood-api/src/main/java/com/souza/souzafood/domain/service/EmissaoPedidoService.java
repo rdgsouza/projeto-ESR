@@ -67,7 +67,7 @@ public class EmissaoPedidoService {
 		if (restaurante.naoAceitaFormaPagamento(formaPagamento)) {
 			throw new NegocioException(String.format("Forma de pagamento '%s' não é aceita por esse restaurante.",
 					formaPagamento.getDescricao()));
-		}
+		} 
 	}
 
 	private void normalizarItens(Pedido pedido) {
