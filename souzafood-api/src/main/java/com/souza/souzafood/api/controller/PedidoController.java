@@ -25,10 +25,10 @@ import com.souza.souzafood.domain.model.Usuario;
 import com.souza.souzafood.domain.repository.PedidoRepository;
 import com.souza.souzafood.domain.service.EmissaoPedidoService;
 
-@RestController 
+@RestController
 @RequestMapping(value = "/pedidos")
 public class PedidoController {
- 
+
 	@Autowired
 	private PedidoRepository pedidoRepository;
 
@@ -62,13 +62,13 @@ public class PedidoController {
 	public PedidoModel adicionar(@Valid @RequestBody PedidoInput pedidoInput) {
 		try {
 			Pedido novoPedido = pedidoInputDisassembler.toDomainObject(pedidoInput);
-			
+
 			// TODO pegar usuário autenticado
 			novoPedido.setCliente(new Usuario());
 			novoPedido.getCliente().setId(1L);
-			
+
 			novoPedido = emissaoPedido.emitir(novoPedido);
-			
+
 			return pedidoModelAssembler.toModel(novoPedido);
 		} catch (EntidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage(), e);

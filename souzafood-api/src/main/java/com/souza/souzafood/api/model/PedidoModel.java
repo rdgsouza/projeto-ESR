@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,9 +18,13 @@ public class PedidoModel {
 	private BigDecimal taxaFrete;
 	private BigDecimal valorTotal;
 	private String status;
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
 	private OffsetDateTime dataCriacao;
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
 	private OffsetDateTime dataConfirmacao;
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
 	private OffsetDateTime dataEntrega;
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
 	private OffsetDateTime dataCancelamento;
 	private RestauranteResumoModel restaurante;
 	private UsuarioModel cliente;
