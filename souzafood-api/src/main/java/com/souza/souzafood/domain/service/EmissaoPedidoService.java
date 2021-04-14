@@ -67,7 +67,7 @@ public class EmissaoPedidoService {
 		if (restaurante.naoAceitaFormaPagamento(formaPagamento)) {
 			throw new NegocioException(String.format("Forma de pagamento '%s' não é aceita por esse restaurante.",
 					formaPagamento.getDescricao()));
-		} 
+		}
 	}
 
 	private void normalizarItens(Pedido pedido) {
@@ -75,11 +75,11 @@ public class EmissaoPedidoService {
 
 		for (ItemPedido item : pedido.getItens()) {
 			Optional<ItemPedido> itemNormalizadoOpt = itensNormalizados.stream()
-					.filter(itemNormalizado -> 
-					   itemNormalizado.getProduto().equals(item.getProduto())).findFirst();
+					.filter(itemNormalizado -> itemNormalizado.getProduto()
+							.equals(item.getProduto())).findFirst();
 
-			itemNormalizadoOpt.ifPresentOrElse(itemNormalizado -> mesclarItens(itemNormalizado, item),
-					() -> itensNormalizados.add(item));
+			itemNormalizadoOpt.ifPresentOrElse(itemNormalizado 
+					-> mesclarItens(itemNormalizado, item),() -> itensNormalizados.add(item));
 		}
 
 		pedido.setItens(new ArrayList<>(itensNormalizados));
@@ -87,19 +87,21 @@ public class EmissaoPedidoService {
 
 	private void mesclarItens(ItemPedido itemNormalizado, ItemPedido itemRepetido) {
 		itemNormalizado.setQuantidade(itemNormalizado.getQuantidade() + itemRepetido.getQuantidade());
-// ifs criados para pegar apenas a propiedade observacao que não estiver nula. Caso tenha duas propiedades nulas
-// vamos setar apenas um null caso as propidades estejam com dua observações ai sim vamos concatenar
-// as string das duas propiedades para ficar duas observações em uma. Já que o cliente informou a observação uma
-// vez e depois resolver adicionar o mesmo item e adicionou outra observação sendo que são os mesmos itens.		
-		if (itemNormalizado.getObservacao() == null && itemRepetido.getObservacao() != null) {
-			itemNormalizado.setObservacao(itemRepetido.getObservacao());
-		} else if (itemNormalizado.getObservacao() != null && itemRepetido.getObservacao() == null) {
-			itemNormalizado.setObservacao(itemNormalizado.getObservacao());
-		} else if (itemNormalizado.getObservacao() == null && itemRepetido.getObservacao() == null) {
-			itemNormalizado.setObservacao(null);
-		} else if (itemNormalizado.getObservacao() != null && itemRepetido.getObservacao() != null) {
-			itemNormalizado.setObservacao(itemNormalizado.getObservacao() + " / " + itemRepetido.getObservacao());
-		}
+
+		var observacaoBuilder = new StringBuilder();
+
+		Optional.ofNullable(itemNormalizado.getObservacao())
+				.ifPresent(observacao -> observacaoBuilder.append(observacao));
+//ifs para não existir repições de string em um campo ex. na propiedade observacao que fica: null/null
+		Optional.ofNullable(itemNormalizado.getObservacao()).ifPresentOrElse(observacao -> {
+			if (observacaoBuilder.length() > 0 && itemRepetido.getObservacao() != null) {
+				observacaoBuilder.append(" / " + itemRepetido.getObservacao());
+				itemNormalizado.setObservacao(observacaoBuilder.toString());
+			} else if (observacaoBuilder.length() > 0 && itemRepetido.getObservacao() == null) {
+				itemNormalizado.setObservacao(observacaoBuilder.toString());
+			}
+		}, 
+			  () -> itemNormalizado.setObservacao(itemRepetido.getObservacao()));
 	}
 
 	private void validarItens(Pedido pedido) {
@@ -114,7 +116,8 @@ public class EmissaoPedidoService {
 	}
 
 	public Pedido buscarOuFalhar(Long pedidoId) {
-		return pedidoRepository.findById(pedidoId).orElseThrow(() -> new PedidoNaoEncontradoException(pedidoId));
+		return pedidoRepository.findById(pedidoId).orElseThrow(()
+				-> new PedidoNaoEncontradoException(pedidoId));
 	}
 
 }

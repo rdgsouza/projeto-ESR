@@ -90,7 +90,7 @@ public class Pedido {
 //	Isso gera uma melhor consistência nos dados, o que facilitaria, por exemplo, a realização de uma auditoria no sistema.
 //  fonte resposta de Alexandre Moraes: https://www.algaworks.com/forum/topicos/83459/duvida-no-script-sql-do-conteudo-de-apoio#87766
 
-	
+
 	public void calcularValorTotal() {
 	getItens().forEach(ItemPedido::calcularPrecoTotal);//Nesta linha é feito um forEach nos itens que estão no Pedido e pra cada item fazemos a multiplicação do valor unitário x quantidade com isso temos o preço total de cada item
 		this.subtotal = getItens().stream() //Nesta linha o conjunto de itens é transformado em um stream de dados, que será percorrido em sua totalidade.
@@ -99,6 +99,6 @@ public class Pedido {
 //Toda a operação com o stream é feita para obter o valor total do pedido considerando apenas os valores dos itens presentes nos pedidos e armazenamento do valor no atributo subtotal.
 		this.valorTotal = this.subtotal.add(this.taxaFrete);//A última linha é para definição do valor total do pedido, considerando os itens e a taxa de frete. Esta linha representa essa soma
 //É utilizado novamente o método add nessa última linha porque ele ta presente na classe-tipo BigDecimal, visto que o atributo subtotal é desse tipo. Não é adequado utilizar o operador '+' para esse tipo. 
-	}
+	  }
 	
 }

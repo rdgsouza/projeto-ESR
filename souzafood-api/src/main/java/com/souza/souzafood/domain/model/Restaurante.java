@@ -120,7 +120,10 @@ public class Restaurante {
 	public boolean removerFormaPagamento(FormaPagamento formaPagamento) {
 		return getFormasPagamento().remove(formaPagamento);
 	}
-
+//obs:Colocamos o formasPagamento do tipo set por que o set não aceita itens repetidos na sua lista
+//Como vamos associar e provavelmente pode ja existir o item com o uma lista do tipo Set não vai ter problema
+//pois não será adicionado, usando o List seria lançado uma exception.
+//Esse assunto estar na aula: https://www.algaworks.com/aulas/2018/implementando-os-endpoints-de-associacao-de-formas-de-pagamento-em-restaurantes	
 	public boolean adicionarFormaPagamento(FormaPagamento formaPagamento) {
 		return getFormasPagamento().add(formaPagamento);
 	}
