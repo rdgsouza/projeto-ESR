@@ -1,6 +1,5 @@
 package com.souza.souzafood.domain.service;
 
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,7 +9,6 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.souza.souzafood.domain.exception.NegocioException;
 import com.souza.souzafood.domain.model.Pedido;
 import com.souza.souzafood.domain.model.StatusPedido;
 
@@ -23,46 +21,54 @@ public class FluxoPedidoService {
 	@Transactional
 	public void confirmar(Long pedidoId) {
 		Pedido pedido = emissaoPedido.buscarOuFalhar(pedidoId);
-
-		if (!pedido.getStatus().equals(StatusPedido.CRIADO)) {
-			throw new NegocioException(
-					String.format("Status do pedido %d não pode ser alterado de %s para %s",
-					pedido.getId(), pedido.getStatus().getDescricao(), StatusPedido.CONFIRMADO.getDescricao()));
-		}
-
-		pedido.setStatus(StatusPedido.CONFIRMADO);
-		pedido.setDataConfirmacao(OffsetDateTime.now());
+		pedido.confirmar();
 	}
 
 	@Transactional
 	public void cancelar(Long pedidoId) {
 		Pedido pedido = emissaoPedido.buscarOuFalhar(pedidoId);
-
-		if (!pedido.getStatus().equals(StatusPedido.CRIADO)) {
-			throw new NegocioException(
-					String.format("Status do pedido %d não pode ser alterado de %s para %s",
-					pedido.getId(), pedido.getStatus().getDescricao(), StatusPedido.CANCELADO.getDescricao()));
-		}
-
-		pedido.setStatus(StatusPedido.CANCELADO);
-		pedido.setDataCancelamento(OffsetDateTime.now());
+		pedido.cancelar();
 	}
 
 	@Transactional
 	public void entregar(Long pedidoId) {
 		Pedido pedido = emissaoPedido.buscarOuFalhar(pedidoId);
+        pedido.entregar();
+	}
 
-		if (!pedido.getStatus().equals(StatusPedido.CONFIRMADO)) {
-			throw new NegocioException(
-					String.format("Status do pedido %d não pode ser alterado de %s para %s",
-					pedido.getId(), pedido.getStatus().getDescricao(), StatusPedido.ENTREGUE.getDescricao()));
+//	Desafio: Usar Stream e Lambda no método abaixo para diminuir as linhas de códigos 
+	@Transactional
+	public List<String> retornaTodosStatusEmArray(Long pedidoId) {
+		Pedido pedido = emissaoPedido.buscarOuFalhar(pedidoId);
+
+		List<Object> pedidosStatusObject = new ArrayList<>();
+		List<String> pedidosStatus = new ArrayList<>();
+
+		if (!pedidosStatusObject.contains(pedido.getDataCriacao()) && pedido.getDataCriacao() != null) {
+			pedidosStatusObject.add("Status: 'Criado' Data da criação: " + pedido.getDataCriacao());
 		}
 
-		pedido.setStatus(StatusPedido.ENTREGUE);
-		pedido.setDataEntrega(OffsetDateTime.now());
+		if (!pedidosStatusObject.contains(pedido.getDataConfirmacao()) && pedido.getDataConfirmacao() != null) {
+			pedidosStatusObject.add("Status: 'Confirmado' Data da confirmação: " + pedido.getDataConfirmacao());
+		}
+
+		if (!pedidosStatusObject.contains(pedido.getDataEntrega()) && pedido.getDataEntrega() != null) {
+			pedidosStatusObject.add("Status: 'Entregue' Data da entrega: " + pedido.getDataEntrega());
+		}
+
+		if (!pedidosStatusObject.contains(pedido.getDataCancelamento()) && pedido.getDataCancelamento() != null) {
+			pedidosStatusObject.add("Status: 'Cancelado' Data do cancelamento: " + pedido.getDataCancelamento());
+		}
+
+		pedidosStatus = pedidosStatusObject
+				.stream()
+				.map(element -> (String) element).collect(Collectors.toList());
+
+		return pedidosStatus;
 	}
 	
-//	Desafio: Usar Stream e Lambda no método abaixo para diminuir as linhas de códigos 
+//**OBS: Método abaixo retorna todos status em objetos. Caso precisar usar não fazer as alterações que o Thiago faz na aula https://www.algaworks.com/aulas/2030/refatorando-o-codigo-de-regras-para-transicao-de-status-de-pedidos
+//**Para dimuir os ifs na hora da criação dos status ele fez algumas modificações e com isso afetou o metodo abaixo.
 	@Transactional
 	public List<Pedido> retornaTodosStatusEmObjetos(Long pedidoId) {
 		Pedido pedido = emissaoPedido.buscarOuFalhar(pedidoId);
@@ -101,37 +107,6 @@ public class FluxoPedidoService {
 		pedidosStatus = pedidosStatusObject
 				.stream()
 				.map(element -> (Pedido) element).collect(Collectors.toList());
-
-		return pedidosStatus;
-	}
-	
-//	Desafio: Usar Stream e Lambda no método abaixo para diminuir as linhas de códigos 
-	@Transactional
-	public List<String> retornaTodosStatusEmArray(Long pedidoId) {
-		Pedido pedido = emissaoPedido.buscarOuFalhar(pedidoId);
-
-		List<Object> pedidosStatusObject = new ArrayList<>();
-		List<String> pedidosStatus = new ArrayList<>();
-
-		if (!pedidosStatusObject.contains(pedido.getDataCriacao()) && pedido.getDataCriacao() != null) {
-			pedidosStatusObject.add("Status: 'Criado' Data da criação: " + pedido.getDataCriacao());
-		}
-
-		if (!pedidosStatusObject.contains(pedido.getDataConfirmacao()) && pedido.getDataConfirmacao() != null) {
-			pedidosStatusObject.add("Status: 'Confirmado' Data da confirmação: " + pedido.getDataConfirmacao());
-		}
-
-		if (!pedidosStatusObject.contains(pedido.getDataEntrega()) && pedido.getDataEntrega() != null) {
-			pedidosStatusObject.add("Status: 'Entregue' Data da entrega: " + pedido.getDataEntrega());
-		}
-
-		if (!pedidosStatusObject.contains(pedido.getDataCancelamento()) && pedido.getDataCancelamento() != null) {
-			pedidosStatusObject.add("Status: 'Cancelado' Data do cancelamento: " + pedido.getDataCancelamento());
-		}
-
-		pedidosStatus = pedidosStatusObject
-				.stream()
-				.map(element -> (String) element).collect(Collectors.toList());
 
 		return pedidosStatus;
 	}

@@ -21,6 +21,7 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.souza.souzafood.domain.exception.NegocioException;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -101,4 +102,29 @@ public class Pedido {
 //É utilizado novamente o método add nessa última linha porque ele ta presente na classe-tipo BigDecimal, visto que o atributo subtotal é desse tipo. Não é adequado utilizar o operador '+' para esse tipo. 
 	  }
 	
+	public void confirmar() {
+		  alterarStatus(StatusPedido.CONFIRMADO);
+		  setDataConfirmacao(OffsetDateTime.now());
+	}
+
+	public void entregar() {
+		  alterarStatus(StatusPedido.ENTREGUE);
+		  setDataEntrega(OffsetDateTime.now());
+	}
+	
+	public void cancelar() {
+		  alterarStatus(StatusPedido.CANCELADO);
+		  setDataCancelamento(OffsetDateTime.now());
+	}
+	
+	private void alterarStatus(StatusPedido novoStatus) {
+		
+		if(getStatus().naoPodeAlterarPara(novoStatus)) {
+			throw new NegocioException(
+			 String.format("Status do pedido %d não pode ser alterado de %s para %s",
+			   getId(), getStatus().getDescricao(), novoStatus.getDescricao()));
+		} 
+		
+		this.status = novoStatus;
+	}
 }
