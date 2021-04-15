@@ -1,13 +1,18 @@
 package com.souza.souzafood.api.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.souza.souzafood.api.assembler.PedidoStatusResumoModelAssembler;
+import com.souza.souzafood.api.model.PedidoStatusResumoModel;
 import com.souza.souzafood.domain.service.FluxoPedidoService;
 
 @RestController
@@ -17,6 +22,9 @@ public class FluxoPedidoController {
 	@Autowired
 	private FluxoPedidoService fluxoPedido;
 
+	@Autowired
+	private PedidoStatusResumoModelAssembler pedidoStatusResumoModelAssembler;
+	
 	@PutMapping("/confirmacao")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void confirmar(@PathVariable Long pedidoId) {
@@ -35,4 +43,10 @@ public class FluxoPedidoController {
 	    fluxoPedido.entregar(pedidoId);
 	}
 
+	@GetMapping("/status")
+	public List<PedidoStatusResumoModel> buscar(@PathVariable Long pedidoId) {
+		return pedidoStatusResumoModelAssembler
+				.toCollectionModel(fluxoPedido.retornaTodosStatusEmObjetos(pedidoId));
+	}
+	
 }
