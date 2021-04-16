@@ -50,7 +50,7 @@ public class FluxoPedidoController {
 				.toCollectionModel(fluxoPedido.retornaTodosStatusEmArrayDeObjetos(pedidoId));
 	}
 
-//	Get para o metodo retornaTodosStatusEmArrayDeString
+//	Get para o metodo retornaTodosStatusEmArrayDeString 
 //	@GetMapping("/status")
 //	public List<String> buscar(@PathVariable Long pedidoId) {
 //		return fluxoPedido.retornaTodosStatusEmArrayDeString(pedidoId);
