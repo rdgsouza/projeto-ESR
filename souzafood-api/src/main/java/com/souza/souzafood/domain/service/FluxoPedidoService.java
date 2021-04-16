@@ -19,27 +19,27 @@ public class FluxoPedidoService {
 	private EmissaoPedidoService emissaoPedido;
 
 	@Transactional
-	public void confirmar(Long pedidoId) {
-		Pedido pedido = emissaoPedido.buscarOuFalhar(pedidoId);
+	public void confirmar(String codigoPedido) {
+		Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
 		pedido.confirmar();
 	}
 
 	@Transactional
-	public void cancelar(Long pedidoId) {
-		Pedido pedido = emissaoPedido.buscarOuFalhar(pedidoId);
+	public void cancelar(String codigoPedido) {
+		Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
 		pedido.cancelar();
 	}
 
 	@Transactional
-	public void entregar(Long pedidoId) {
-		Pedido pedido = emissaoPedido.buscarOuFalhar(pedidoId);
+	public void entregar(String codigoPedido) {
+		Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
         pedido.entregar();
 	}
 
 //	Desafio: Usar Stream e Lambda no método abaixo para diminuir as linhas de códigos 
 	@Transactional
-	public List<String> retornaTodosStatusEmArrayDeString(Long pedidoId) {
-		Pedido pedido = emissaoPedido.buscarOuFalhar(pedidoId);
+	public List<String> retornaTodosStatusEmArrayDeString(String codigoPedido) {
+		Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
 
 		List<Object> pedidosStatusObject = new ArrayList<>();
 		List<String> pedidosStatus = new ArrayList<>();
@@ -68,8 +68,8 @@ public class FluxoPedidoService {
 	}
 	
 	@Transactional
-	public List<Pedido> retornaTodosStatusEmArrayDeObjetos(Long pedidoId) {
-		Pedido pedido = emissaoPedido.buscarOuFalhar(pedidoId);
+	public List<Pedido> retornaTodosStatusEmArrayDeObjetos(String codigoPedido) {
+		Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
 
 		List<Object> pedidosStatusObject = new ArrayList<>();
 		List<Pedido> pedidosStatus = new ArrayList<>();

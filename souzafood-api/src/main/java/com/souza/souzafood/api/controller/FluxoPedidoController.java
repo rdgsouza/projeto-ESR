@@ -16,7 +16,7 @@ import com.souza.souzafood.api.model.PedidoStatusResumoModel;
 import com.souza.souzafood.domain.service.FluxoPedidoService;
 
 @RestController
-@RequestMapping(value = "/pedidos/{pedidoId}")
+@RequestMapping(value = "/pedidos/{codigoPedido}")
 public class FluxoPedidoController {
 
 	@Autowired
@@ -27,27 +27,27 @@ public class FluxoPedidoController {
 	
 	@PutMapping("/confirmacao")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void confirmar(@PathVariable Long pedidoId) {
-		fluxoPedido.confirmar(pedidoId);
+	public void confirmar(@PathVariable String codigoPedido) {
+		fluxoPedido.confirmar(codigoPedido);
 	}
 
 	@PutMapping("/cancelamento")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void cancelar(@PathVariable Long pedidoId) {
-	    fluxoPedido.cancelar(pedidoId);
+	public void cancelar(@PathVariable String codigoPedido) {
+	    fluxoPedido.cancelar(codigoPedido);
 	}
 
 	@PutMapping("/entrega")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void entregar(@PathVariable Long pedidoId) {
-	    fluxoPedido.entregar(pedidoId);
+	public void entregar(@PathVariable String codigoPedido) {
+	    fluxoPedido.entregar(codigoPedido);
 	}
 
 //	Get para o metodo retornaTodosStatusEmArrayObjetos
 	@GetMapping("/status")
-	public List<PedidoStatusResumoModel> buscar(@PathVariable Long pedidoId) {
+	public List<PedidoStatusResumoModel> buscar(@PathVariable String codigoPedido) {
 		return pedidoStatusResumoModelAssembler
-				.toCollectionModel(fluxoPedido.retornaTodosStatusEmArrayDeObjetos(pedidoId));
+				.toCollectionModel(fluxoPedido.retornaTodosStatusEmArrayDeObjetos(codigoPedido));
 	}
 
 //	Get para o metodo retornaTodosStatusEmArrayDeString 
