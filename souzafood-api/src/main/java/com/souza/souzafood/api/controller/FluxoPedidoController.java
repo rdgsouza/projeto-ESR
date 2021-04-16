@@ -43,14 +43,14 @@ public class FluxoPedidoController {
 	    fluxoPedido.entregar(pedidoId);
 	}
 
-//	Get para o metodo retornaTodosStatusEmObjetos
+//	Get para o metodo retornaTodosStatusEmArrayObjetos
 	@GetMapping("/status")
 	public List<PedidoStatusResumoModel> buscar(@PathVariable Long pedidoId) {
 		return pedidoStatusResumoModelAssembler
 				.toCollectionModel(fluxoPedido.retornaTodosStatusEmArrayDeObjetos(pedidoId));
 	}
 
-//	Get para o metodo retornaTodosStatusEmArray
+//	Get para o metodo retornaTodosStatusEmArrayDeString
 //	@GetMapping("/status")
 //	public List<String> buscar(@PathVariable Long pedidoId) {
 //		return fluxoPedido.retornaTodosStatusEmArrayDeString(pedidoId);
