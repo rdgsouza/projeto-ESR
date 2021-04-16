@@ -62,7 +62,7 @@ public class FluxoPedidoService {
 
 		pedidosStatus = pedidosStatusObject
 				.stream()
-				.map(element -> (String) element).collect(Collectors.toList());
+				.map(elemento -> (String) elemento).collect(Collectors.toList());
 
 		return pedidosStatus;
 	}
@@ -104,7 +104,7 @@ public class FluxoPedidoService {
 
 		pedidosStatus = pedidosStatusObject
 				.stream()
-				.map(element -> (Pedido) element).collect(Collectors.toList());
+				.map(elemento -> (Pedido) elemento).collect(Collectors.toList());
 
 		return pedidosStatus;
 	}
