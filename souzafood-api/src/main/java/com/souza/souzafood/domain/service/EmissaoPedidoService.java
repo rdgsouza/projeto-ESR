@@ -92,7 +92,7 @@ public class EmissaoPedidoService {
 
 		Optional.ofNullable(itemNormalizado.getObservacao())
 				.ifPresent(observacao -> observacaoBuilder.append(observacao));
-//ifs para não existir repições de string em um campo ex. na propiedade observacao que fica: null/null
+//ifs para não existir repições de string em um campo observacao que fica: null/null
 		Optional.ofNullable(itemNormalizado.getObservacao()).ifPresentOrElse(observacao -> {
 			if (observacaoBuilder.length() > 0 && itemRepetido.getObservacao() != null) {
 				observacaoBuilder.append(" / " + itemRepetido.getObservacao());
