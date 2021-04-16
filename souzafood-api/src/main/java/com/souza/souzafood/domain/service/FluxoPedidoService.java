@@ -38,7 +38,7 @@ public class FluxoPedidoService {
 
 //	Desafio: Usar Stream e Lambda no método abaixo para diminuir as linhas de códigos 
 	@Transactional
-	public List<String> retornaTodosStatusEmArray(Long pedidoId) {
+	public List<String> retornaTodosStatusEmArrayDeString(Long pedidoId) {
 		Pedido pedido = emissaoPedido.buscarOuFalhar(pedidoId);
 
 		List<Object> pedidosStatusObject = new ArrayList<>();
@@ -67,10 +67,8 @@ public class FluxoPedidoService {
 		return pedidosStatus;
 	}
 	
-//**OBS: Método abaixo retorna todos status em objetos. Caso precisar usar não fazer as alterações que o Thiago faz na aula https://www.algaworks.com/aulas/2030/refatorando-o-codigo-de-regras-para-transicao-de-status-de-pedidos
-//**Para dimuir os ifs na hora da criação dos status ele fez algumas modificações e com isso afetou o metodo abaixo.
 	@Transactional
-	public List<Pedido> retornaTodosStatusEmObjetos(Long pedidoId) {
+	public List<Pedido> retornaTodosStatusEmArrayDeObjetos(Long pedidoId) {
 		Pedido pedido = emissaoPedido.buscarOuFalhar(pedidoId);
 
 		List<Object> pedidosStatusObject = new ArrayList<>();
