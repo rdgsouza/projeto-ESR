@@ -1,7 +1,5 @@
 package com.souza.souzafood.api.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.souza.souzafood.api.assembler.PedidoStatusResumoModelAssembler;
 import com.souza.souzafood.api.model.PedidoStatusResumoModel;
+import com.souza.souzafood.domain.service.EmissaoPedidoService;
 import com.souza.souzafood.domain.service.FluxoPedidoService;
 
 @RestController
@@ -24,6 +23,9 @@ public class FluxoPedidoController {
 
 	@Autowired
 	private PedidoStatusResumoModelAssembler pedidoStatusResumoModelAssembler;
+	
+	@Autowired
+	private EmissaoPedidoService emissaoPedidoService;
 	
 	@PutMapping("/confirmacao")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
@@ -43,17 +45,9 @@ public class FluxoPedidoController {
 	    fluxoPedido.entregar(codigoPedido);
 	}
 
-//	Get para o metodo retornaTodosStatusEmArrayObjetos
 	@GetMapping("/status")
-	public List<PedidoStatusResumoModel> buscar(@PathVariable String codigoPedido) {
-		return pedidoStatusResumoModelAssembler
-				.toCollectionModel(fluxoPedido.retornaTodosStatusEmArrayDeObjetos(codigoPedido));
+	public PedidoStatusResumoModel buscar(@PathVariable String codigoPedido) {
+		return pedidoStatusResumoModelAssembler.toModel(
+			emissaoPedidoService.buscarOuFalhar(codigoPedido));
 	}
-
-//	Get para o metodo retornaTodosStatusEmArrayDeString 
-//	@GetMapping("/status")
-//	public List<String> buscar(@PathVariable Long pedidoId) {
-//		return fluxoPedido.retornaTodosStatusEmArrayDeString(pedidoId);
-//	}
-
 }

@@ -107,21 +107,21 @@ public class Pedido {
 	  }
 	
 	public void confirmar() {
-		  alterarStatus(StatusPedido.CONFIRMADO);
+		  setStatus(StatusPedido.CONFIRMADO);
 		  setDataConfirmacao(OffsetDateTime.now());
 	}
 
 	public void entregar() {
-		  alterarStatus(StatusPedido.ENTREGUE);
+		  setStatus(StatusPedido.ENTREGUE);
 		  setDataEntrega(OffsetDateTime.now());
 	}
 	
 	public void cancelar() {
-		  alterarStatus(StatusPedido.CANCELADO);
+		  setStatus(StatusPedido.CANCELADO);
 		  setDataCancelamento(OffsetDateTime.now());
 	}
 	
-	private void alterarStatus(StatusPedido novoStatus) {
+	private void setStatus(StatusPedido novoStatus) {
 		
 		if(getStatus().naoPodeAlterarPara(novoStatus)) {
 			throw new NegocioException(
