@@ -23,7 +23,9 @@ import com.souza.souzafood.domain.exception.NegocioException;
 import com.souza.souzafood.domain.model.Pedido;
 import com.souza.souzafood.domain.model.Usuario;
 import com.souza.souzafood.domain.repository.PedidoRepository;
+import com.souza.souzafood.domain.repository.filter.PedidoFilter;
 import com.souza.souzafood.domain.service.EmissaoPedidoService;
+import com.souza.souzafood.infrastructure.repository.spec.PedidoSpecs;
 
 @RestController
 @RequestMapping(value = "/pedidos")
@@ -65,8 +67,8 @@ public class PedidoController {
 //	}
 	
 	@GetMapping
-	public List<PedidoResumoModel> listar() {
-		List<Pedido> todosPedidos = pedidoRepository.findAll();
+	public List<PedidoResumoModel> pesquisar(PedidoFilter filtro) {
+		List<Pedido> todosPedidos = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro));
 
 		return pedidoResumoModelAssembler.toCollectionModel(todosPedidos);
 	}
