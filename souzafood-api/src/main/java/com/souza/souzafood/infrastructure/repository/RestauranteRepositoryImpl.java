@@ -30,7 +30,7 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries{
 	@PersistenceContext
 	private EntityManager manager;
 	
-	@Autowired @Lazy
+	@Autowired @Lazy //Anotação Lazy para evitar o erro de referência circular. Aula:https://www.algaworks.com/aulas/1892/injetando-o-proprio-repositorio-na-implementacao-customizada-e-a-anotacao-lazy
 	private RestauranteRepository restauranteRepository;
 	
 	@Override
