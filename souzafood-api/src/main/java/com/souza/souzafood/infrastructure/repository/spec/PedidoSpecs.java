@@ -12,9 +12,13 @@ import com.souza.souzafood.domain.repository.filter.PedidoFilter;
 public class PedidoSpecs {
 
 	public static Specification<Pedido> usandoFiltro(PedidoFilter filtro) {
-		return (root, query, builder) -> {
+		return (root, query, builder) -> { //O parametro query é o CriteriaQuery
+			if (Pedido.class.equals(query.getResultType())) { //if usado para resolver 
+// a exception: org.springframework.dao.InvalidDataAccessApiUsageException: org.hibernate.QueryException: query specified join fetching, but the owner of the fetched association was not present in the select list [FromElement{explicit,not a collection join,fetch join,fetch non-lazy properties,classAlias=generatedAlias1,role=com.souza.souzafood.domain.model.Pedido.restaurante,tableName=restaurante,tableAlias=restaurant1_,origin=pedido pedido0_,columns={pedido0_.restaurante_id ,className=com.souza.souzafood.domain.model.Restaurante}}] [select count(generatedAlias0) from com.souza.souzafood.domain.model.Pedido as generatedAlias0 inner join fetch generatedAlias0.restaurante as generatedAlias1 inner join fetch generatedAlias1.cozinha as generatedAlias2 inner join fetch generatedAlias0.cliente as generatedAlias3 where generatedAlias0.restaurante=1L]; nested exception is java.lang.IllegalArgumentException: org.hibernate.QueryException: query specified join fetching, but the owner of the fetched association was not present in the select list [FromElement{explicit,not a collection join,fetch join,fetch non-lazy properties,classAlias=generatedAlias1,role=com.souza.souzafood.domain.model.Pedido.restaurante,tableName=restaurante,tableAlias=restaurant1_,origin=pedido pedido0_,columns={pedido0_.restaurante_id ,className=com.souza.souzafood.domain.model.Restaurante}}] [select count(generatedAlias0) from com.souza.souzafood.domain.model.Pedido as generatedAlias0 inner join fetch generatedAlias0.restaurante as generatedAlias1 inner join fetch generatedAlias1.cozinha as generatedAlias2 inner join fetch generatedAlias0.cliente as generatedAlias3 where generatedAlias0.restaurante=1L]
+// Aula: https://www.algaworks.com/aulas/2041/desafio-implementando-paginacao-e-ordenacao-de-pedidos
 			root.fetch("restaurante").fetch("cozinha");
 			root.fetch("cliente");
+			}
 			
 			var predicates = new ArrayList<Predicate>();
 			
