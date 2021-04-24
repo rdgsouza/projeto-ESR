@@ -26,10 +26,10 @@ import com.souza.souzafood.api.model.input.PedidoInputDisassembler;
 import com.souza.souzafood.core.data.PageableTranslator;
 import com.souza.souzafood.domain.exception.EntidadeNaoEncontradaException;
 import com.souza.souzafood.domain.exception.NegocioException;
+import com.souza.souzafood.domain.filter.PedidoFilter;
 import com.souza.souzafood.domain.model.Pedido;
 import com.souza.souzafood.domain.model.Usuario;
 import com.souza.souzafood.domain.repository.PedidoRepository;
-import com.souza.souzafood.domain.repository.filter.PedidoFilter;
 import com.souza.souzafood.domain.service.EmissaoPedidoService;
 import com.souza.souzafood.infrastructure.repository.spec.PedidoSpecs;
 

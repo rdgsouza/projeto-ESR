@@ -17,7 +17,6 @@ public class PageableTranslator {
 				   fieldsMapping.get(order.getProperty())))
 		   .collect(Collectors.toList());
 		   	
-		
 		return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
 				Sort.by(orders));
 	}
