@@ -24,21 +24,31 @@ public class VendaQueryServiceImpl implements VendaQueryService {
 
 //	Aula: https://www.algaworks.com/aulas/2046/implementando-consulta-com-dados-agregados-de-vendas-diarias
 	@Override
-	public List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter filtro) {
+	public List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter filtro, String timeOffset) {
 
 		var builder = manager.getCriteriaBuilder();
 		var query = builder.createQuery(VendaDiaria.class);
 		var root = query.from(Pedido.class);
-
 		var predicates = new ArrayList<Predicate>();
 
+		var functionConvertTzDataCriacao = builder.function(
+				"convert_tz", Date.class, root.get("dataCriacao"),
+				builder.literal("+00:00"), builder.literal(timeOffset));
+		
+		var functionDateDataCriacao = builder.function("date", Date.class, 
+				functionConvertTzDataCriacao);
+
+		var selection = builder.construct(VendaDiaria.class, functionDateDataCriacao, 
+				builder.count(root.get("id")),
+				builder.sum(root.get("valorTotal")));
+		
 		if (filtro.getRestauranteId() != null) {
 			predicates.add(builder.equal(root.get("restaurante"), filtro.getRestauranteId()));
 		}
 		
 		if (filtro.getDataCriacaoInicio() != null) {
 			predicates.add(builder.greaterThanOrEqualTo(root.get("dataCriacao"),
-					filtro.getDataCriacaoFim()));
+					filtro.getDataCriacaoInicio()));
 		}
 		
 		if (filtro.getDataCriacaoFim() != null) {
@@ -51,13 +61,6 @@ public class VendaQueryServiceImpl implements VendaQueryService {
 		
 		query.where(predicates.toArray(new Predicate[0]));//Transformando uma collection em array
 //		Aula que explica sobre essa transformação: https://www.algaworks.com/aulas/1888/tornando-a-consulta-com-criteria-api-com-filtros-dinamicos
-		
-		var functionDateDataCriacao = builder.function("date", Date.class, 
-				root.get("dataCriacao"));
-
-		var selection = builder.construct(VendaDiaria.class, functionDateDataCriacao, 
-				builder.count(root.get("id")),
-				builder.sum(root.get("valorTotal")));
 
 		query.select(selection);
 		query.groupBy(functionDateDataCriacao);
