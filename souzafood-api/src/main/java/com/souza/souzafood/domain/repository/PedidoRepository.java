@@ -7,9 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.souza.souzafood.domain.filter.VendaDiariaFilter;
 import com.souza.souzafood.domain.model.Pedido;
-import com.souza.souzafood.domain.model.dto.VendaDiaria;
 
 @Repository
 public interface PedidoRepository extends CustomJpaRepository<Pedido, Long>, 

@@ -17,7 +17,7 @@ public class ModelMapperConfig {
 		var modelMapper = new ModelMapper();
 
 //Para forçar o map a fazer um mapping em uma propriedade com nome diferente
-//como vimos na aula sobre correspondência as propiedades tem que haver uma correspondencia para poder ser passado os valores para de uma propiedade para outra
+//como vimos na aula sobre correspondência as propiedades tem que ter uma correspondencia para poder ser passado os valores para de uma propiedade para outra
 //Mas para ser "copiado" os valores de uma propiedade para uma outra que não tem correspondêcia nos nomes. 
 //Temos que fazer como dessa forma:
 //	 modelMapper.createTypeMap(Restaurante.class, RestauranteModel.class)
