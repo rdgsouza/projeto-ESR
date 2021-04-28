@@ -1,4 +1,4 @@
-package com.souza.souzafood.infrastructure.service;
+package com.souza.souzafood.infrastructure.service.query;
 
 import java.util.ArrayList;
 import java.util.Date;
