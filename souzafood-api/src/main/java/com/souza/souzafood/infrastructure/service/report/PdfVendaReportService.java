@@ -1,7 +1,5 @@
 package com.souza.souzafood.infrastructure.service.report;
 
-import java.io.InputStream;
-
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -14,7 +12,6 @@ import com.souza.souzafood.domain.service.VendaReportService;
 
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Service
@@ -26,7 +23,7 @@ public class PdfVendaReportService implements VendaReportService {
 	@Override
 	public byte[] emitirVendasDiarias(VendaDiariaFilter filtro, String timeOffset) {
 		try {
-			InputStream inputStream = this.getClass().getResourceAsStream(
+			var inputStream = this.getClass().getResourceAsStream(
 					"/relatorios/vendas-diarias.jasper");
 			
 			var parametros = new HashMap<String, Object>();
@@ -35,7 +32,7 @@ public class PdfVendaReportService implements VendaReportService {
 			var vendasDiarias = vendaQueryService.consultarVendasDiarias(filtro, timeOffset);
 			var dataSource = new JRBeanCollectionDataSource(vendasDiarias);
 			
-			JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parametros, dataSource);
+			var jasperPrint = JasperFillManager.fillReport(inputStream, parametros, dataSource);
 		
 			return JasperExportManager.exportReportToPdf(jasperPrint);
 		} catch (Exception e) {
