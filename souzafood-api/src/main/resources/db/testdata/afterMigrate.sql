@@ -16,6 +16,7 @@ truncate souzafood.usuario;
 truncate souzafood.usuario_grupo;
 truncate souzafood.pedido;
 truncate souzafood.item_pedido;
+truncate souzafood.foto_produto;
 
 set foreign_key_checks = 1;
 
