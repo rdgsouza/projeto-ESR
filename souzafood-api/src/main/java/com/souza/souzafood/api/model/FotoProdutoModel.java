@@ -11,5 +11,6 @@ public class FotoProdutoModel {
 	private String descricao;
 	private String contentType;
 	private Long tamanho;
+	private String url;
 
 }

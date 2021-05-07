@@ -1,6 +1,7 @@
 package com.souza.souzafood.domain.service;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -17,7 +18,7 @@ import com.souza.souzafood.domain.service.FotoStorageService.NovaFoto;
 public class CatalagoFotoProdutoService {
 
 	@Autowired
-	private ProdutoRepository produtoRepository;
+	private ProdutoRepository produtoRepository; 
 
 	@Autowired
 	private FotoStorageService fotoStorage;
@@ -51,10 +52,21 @@ public class CatalagoFotoProdutoService {
 
 		return foto;
 	}
+	@Transactional
+	public void excluir(Long restauranteId, Long produtoId) {
+		FotoProduto fotoProduto = buscarOuFalhar(restauranteId, produtoId);
+		produtoRepository.delete(fotoProduto);
+		produtoRepository.flush();
+		fotoStorage.remover(fotoProduto.getNomeArquivo());
+	}
 
 	public FotoProduto buscarOuFalhar(Long restauranteId, Long produtoId) {
 		return produtoRepository.findFotoById(restauranteId, produtoId)
 				.orElseThrow(() -> new FotoProdutoNaoEncontradaException(restauranteId, produtoId));
 	}
 
+	public List<FotoProduto> buscarTodos(Long restauranteId) {
+		return produtoRepository.findAllRestauranteById(restauranteId);
+	}
+	
 }

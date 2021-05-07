@@ -1,12 +1,15 @@
 package com.souza.souzafood.core.modelmapper;
 
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.souza.souzafood.api.model.EnderecoModel;
+import com.souza.souzafood.api.model.FotoProdutoModel;
 import com.souza.souzafood.api.model.input.ItemPedidoInput;
 import com.souza.souzafood.domain.model.Endereco;
+import com.souza.souzafood.domain.model.FotoProduto;
 import com.souza.souzafood.domain.model.ItemPedido;
 
 @Configuration
@@ -48,7 +51,17 @@ public class ModelMapperConfig {
 		         .<String>addMapping(src -> src.getCidade().getEstado().getNome(),
 				 (enderecoModelDest, value) -> enderecoModelDest.getCidade().setEstado(value));
 
+		Converter<String, String> imagemParaUrl = ctx -> criarImagemUrl(ctx.getSource());
+		
+		modelMapper.createTypeMap(FotoProduto.class, FotoProdutoModel.class)
+				.addMappings(mapper -> mapper.using(imagemParaUrl)
+						.map(FotoProduto::getNomeArquivo, FotoProdutoModel::setUrl));
+		
 		return modelMapper;
 	}
-
+	
+	private String criarImagemUrl(String nomeArquivo) {
+		return "/home/rodrigo/Documents/catalago/" + nomeArquivo;
+	}
+	
 }

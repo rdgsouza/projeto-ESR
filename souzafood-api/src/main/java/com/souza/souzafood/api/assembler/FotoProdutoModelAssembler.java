@@ -1,5 +1,8 @@
 package com.souza.souzafood.api.assembler;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,4 +20,7 @@ public class FotoProdutoModelAssembler {
 		return modelMapper.map(foto, FotoProdutoModel.class);
 	}
 
+	public List<FotoProdutoModel> toModelList(List<FotoProduto> fotos) {
+		return fotos.stream().map(this::toModel).collect(Collectors.toList());
+	}
 }
