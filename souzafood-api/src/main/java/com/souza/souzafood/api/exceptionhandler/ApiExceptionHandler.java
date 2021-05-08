@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.tomcat.util.http.fileupload.FileUploadBase.FileSizeLimitExceededException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -306,4 +308,36 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	private String joinPath(List<Reference> references) {
 		return references.stream().map(ref -> ref.getFieldName()).collect(Collectors.joining("."));
 	}	
+	
+//Solução para questão em: https://www.algaworks.com/forum/topicos/83315/lidando-com-erro-500-qd-o-arquivo-passa-do-max-allowed-do-tomcat
+	@ExceptionHandler(MaxUploadSizeExceededException.class)
+	public ResponseEntity<Object> handleMaxUploadFileSizeExceeded(
+			MaxUploadSizeExceededException ex, WebRequest request) {
+
+		HttpStatus status = HttpStatus.PAYLOAD_TOO_LARGE;
+		ProblemType problemType = ProblemType.TAMANHO_MAX_DO_ARQUIVO_EXCEDIDO;
+		String detail = String.format("O arquivo que você está tentando enviar excede o tamanho "
+				+ "máximo permitido de %d bytes",
+			       ex.getMaxUploadSize());
+		String userMessage = String.format("O arquivo que você está tentando enviar excede o tamanho "
+				+ "máximo permitido de %d bytes",
+			       ex.getMaxUploadSize());
+		
+		if (ex.getRootCause() instanceof FileSizeLimitExceededException) {
+			var exp = (FileSizeLimitExceededException) ex.getRootCause();
+			detail =  String.format("O arquivo que você está tentando enviar excede o tamanho "
+					+ "máximo permitido de %d bytes",
+					exp.getPermittedSize());
+			userMessage = String.format("O arquivo que você está tentando enviar excede o tamanho "
+					+ "máximo permitido de %d bytes",
+					exp.getPermittedSize());
+		}
+
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(userMessage)
+				.build();
+
+		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+	}
+	
 }

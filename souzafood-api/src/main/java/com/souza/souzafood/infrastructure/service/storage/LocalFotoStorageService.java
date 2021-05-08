@@ -1,10 +1,12 @@
 package com.souza.souzafood.infrastructure.service.storage;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
@@ -50,6 +52,16 @@ public class LocalFotoStorageService implements FotoStorageService {
 		} catch (Exception e) {
 			throw new StorageException("Não foi possível recuperar arquivo.", e);
 		}
+	}
+
+	@Override
+	public MediaType retornaMediaType(String nomeArquivo) throws IOException {
+		
+		Path caminhoArquivo = getArquivoPath(nomeArquivo);
+		String contentType = Files.probeContentType(Path.of(caminhoArquivo.toString()));		
+        MediaType mediaType = MediaType.parseMediaType(contentType);
+		
+        return mediaType;
 	}
 	
 	private Path getArquivoPath(String nomeArquivo) {

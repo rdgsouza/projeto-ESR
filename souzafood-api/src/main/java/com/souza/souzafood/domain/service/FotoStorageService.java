@@ -1,7 +1,10 @@
 package com.souza.souzafood.domain.service;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
+
+import org.springframework.http.MediaType;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -26,6 +29,8 @@ public interface FotoStorageService {
 		return UUID.randomUUID().toString() + "_" + nomeOriginal;
 	}
 
+	public MediaType retornaMediaType(String nomeArquivo) throws IOException;
+	
 	@Builder
 	@Getter
 	class NovaFoto {
