@@ -16,29 +16,27 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.souza.souzafood.domain.exception.EntidadeNaoEncontradaException;
-import com.souza.souzafood.domain.service.FotoStorageService;
+import com.souza.souzafood.infrastructure.service.storage.LocalFotoStorageService;
 
 @Controller
 @RequestMapping("/home/rodrigo/Documents/catalago/{nomeArquivo}")
 public class FotoController {
 
 	@Autowired
-	private FotoStorageService fotoStorage;
-
+	private LocalFotoStorageService localFotoStorage;		
 	
 	@GetMapping
 	public ResponseEntity<InputStreamResource> servirFoto(@PathVariable String nomeArquivo,
 			@RequestHeader(name = "accept") String acceptHeader)  
 					throws IOException , HttpMediaTypeNotAcceptableException {
 		try {
-			
 		//Como não temos uma propiedade do tipo FotoProduto para fazer um fotoProduto.getContentType()
-		//Pegamos o contentType do arquivo a partir do nome do arquivo usando o metodo retornaMediaType
-			MediaType mediaTypeFoto = fotoStorage.retornaMediaType(nomeArquivo);
+		//Pegamos o contentType do arquivo a partir do nome do arquivo usando o metodo retornaTipoDeMidia
+			MediaType mediaTypeFoto = localFotoStorage.retornaTipoDeMidia(nomeArquivo);
 			List<MediaType> mediatypeAceitas = MediaType.parseMediaTypes(acceptHeader);
 			verificarCompatibilidadeMediaType(mediaTypeFoto, mediatypeAceitas);
 			
-			InputStream inputStream = fotoStorage.recuperar(nomeArquivo);
+			InputStream inputStream = localFotoStorage.recuperar(nomeArquivo);
             
 			return ResponseEntity.ok()
 					.contentType(mediaTypeFoto)

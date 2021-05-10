@@ -6,14 +6,13 @@ import java.nio.file.Path;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
 import com.souza.souzafood.core.storage.StorageProperties;
 import com.souza.souzafood.domain.service.FotoStorageService;
 
 //Aula: https://www.algaworks.com/aulas/2060/implementando-o-servico-de-armazenagem-de-fotos-no-disco-local
-@Service
+//@Service   //OBS: Para usar essa classe descomente a anotação @Service
 public class LocalFotoStorageService implements FotoStorageService {
 
 	@Autowired
@@ -53,15 +52,15 @@ public class LocalFotoStorageService implements FotoStorageService {
 		}
 	}
 
-	@Override
-	public MediaType retornaMediaType(String nomeArquivo){
+	public MediaType retornaTipoDeMidia(String nomeArquivo) {
 
 		try {
 			Path caminhoArquivo = getArquivoPath(nomeArquivo);
-			String contentType = Files.probeContentType(Path.of(caminhoArquivo.toString()));
-			MediaType mediaType = MediaType.parseMediaType(contentType);
 
+			MediaType mediaType = returnMediaType(nomeArquivo, caminhoArquivo);
+			
 			return mediaType;
+
 		} catch (Exception e) {
 			throw new StorageException("Não foi possível obter o tipo de mídia do arquivo.", e);
 		}
@@ -69,8 +68,7 @@ public class LocalFotoStorageService implements FotoStorageService {
 
 	private Path getArquivoPath(String nomeArquivo) {
 
-		return storageProperties.getLocal().getDiretorioFotos()
-				.resolve(Path.of(nomeArquivo));
+		return storageProperties.getLocal().getDiretorioFotos().resolve(Path.of(nomeArquivo));
 	}
 
 }
