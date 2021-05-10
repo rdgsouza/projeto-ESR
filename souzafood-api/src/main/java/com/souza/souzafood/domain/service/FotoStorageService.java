@@ -1,6 +1,5 @@
 package com.souza.souzafood.domain.service;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
@@ -37,7 +36,7 @@ public interface FotoStorageService {
 		return UUID.randomUUID().toString() + "_n." + pegarExtensaoArquivo(nomeOriginalArquivo);
 	}
 
-	public MediaType retornaMediaType(String nomeArquivo) throws IOException;
+	public MediaType retornaMediaType(String nomeArquivo);
 	
 	@Builder
 	@Getter
