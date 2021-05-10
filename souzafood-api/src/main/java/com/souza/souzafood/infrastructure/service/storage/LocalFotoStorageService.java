@@ -56,7 +56,6 @@ public class LocalFotoStorageService implements FotoStorageService {
 
 		try {
 			Path caminhoArquivo = getArquivoPath(nomeArquivo);
-
 			MediaType mediaType = returnMediaType(nomeArquivo, caminhoArquivo);
 			
 			return mediaType;
