@@ -19,7 +19,9 @@ public class FotoProduto {
 	@Id
 	@Column(name = "produto_id")
 	private Long id;
-
+//  Aula: https://www.algaworks.com/aulas/2057/mapeando-entidade-fotoproduto-e-relacionamento-um-para-um
+//	Link como resolver o problema do lazy loading com @OneToOne
+//	https://blog.algaworks.com/lazy-loading-com-mapeamento-onetoone/
 	@OneToOne(fetch = FetchType.LAZY)
 	@MapsId
 	private Produto produto;

@@ -25,8 +25,16 @@ public interface FotoStorageService {
 		}
 	}
 
-	default String gerarNomeArquivo(String nomeOriginal) {
-		return UUID.randomUUID().toString() + "_" + nomeOriginal;
+	default String pegarExtensaoArquivo(String nomeOriginalArquivo) {
+        if (nomeOriginalArquivo.contains("."))
+            return nomeOriginalArquivo.substring(nomeOriginalArquivo.lastIndexOf(".") + 1);
+        else
+            return "";
+    }
+	
+	default String gerarNovoNomeArquivo(String nomeOriginalArquivo) {
+		
+		return UUID.randomUUID().toString() + "_n." + pegarExtensaoArquivo(nomeOriginalArquivo);
 	}
 
 	public MediaType retornaMediaType(String nomeArquivo) throws IOException;

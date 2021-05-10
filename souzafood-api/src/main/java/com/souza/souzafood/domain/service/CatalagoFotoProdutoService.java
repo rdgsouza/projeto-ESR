@@ -28,7 +28,7 @@ public class CatalagoFotoProdutoService {
 
 		Long restauranteId = foto.getRestauranteId();
 		Long produtoId = foto.getProduto().getId();
-		String nomeNovoArquivo = fotoStorage.gerarNomeArquivo(foto.getNomeArquivo());
+		String nomeNovoArquivo = fotoStorage.gerarNovoNomeArquivo(foto.getNomeArquivo());
 		String nomeArquivoExistente = null;
 
 		Optional<FotoProduto> fotoExistente = produtoRepository
