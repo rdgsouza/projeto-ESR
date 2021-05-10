@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.souza.souzafood.domain.exception.EntidadeNaoEncontradaException;
+import com.souza.souzafood.domain.service.FotoStorageService;
 import com.souza.souzafood.infrastructure.service.storage.LocalFotoStorageService;
 
 @Controller
@@ -24,6 +25,9 @@ public class FotoController {
 
 	@Autowired
 	private LocalFotoStorageService localFotoStorage;		
+	
+	@Autowired
+	private FotoStorageService fotoStorage;
 	
 	@GetMapping
 	public ResponseEntity<InputStreamResource> servirFoto(@PathVariable String nomeArquivo,
@@ -36,7 +40,7 @@ public class FotoController {
 			List<MediaType> mediatypeAceitas = MediaType.parseMediaTypes(acceptHeader);
 			verificarCompatibilidadeMediaType(mediaTypeFoto, mediatypeAceitas);
 			
-			InputStream inputStream = localFotoStorage.recuperar(nomeArquivo);
+			InputStream inputStream = fotoStorage.recuperar(nomeArquivo);
             
 			return ResponseEntity.ok()
 					.contentType(mediaTypeFoto)

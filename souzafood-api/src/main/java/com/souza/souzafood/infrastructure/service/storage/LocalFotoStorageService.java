@@ -6,13 +6,13 @@ import java.nio.file.Path;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
 import com.souza.souzafood.core.storage.StorageProperties;
 import com.souza.souzafood.domain.service.FotoStorageService;
 
-//Aula: https://www.algaworks.com/aulas/2060/implementando-o-servico-de-armazenagem-de-fotos-no-disco-local
-//@Service   //OBS: Para usar essa classe descomente a anotação @Service
+@Service
 public class LocalFotoStorageService implements FotoStorageService {
 
 	@Autowired
