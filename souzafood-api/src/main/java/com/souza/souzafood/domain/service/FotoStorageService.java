@@ -34,7 +34,7 @@ public interface FotoStorageService {
             return "";
     }
 	
-	default String gerarNovoNomeArquivo(String nomeOriginalArquivo) {
+	default String gerarNovoNomeArquivo(String nomeOriginalArquivo) throws IOException {
 		
 		return UUID.randomUUID().toString() + "_n." + pegarExtensaoArquivo(nomeOriginalArquivo);
 	}

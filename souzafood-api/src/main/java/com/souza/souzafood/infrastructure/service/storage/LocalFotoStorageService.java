@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
@@ -49,19 +48,6 @@ public class LocalFotoStorageService implements FotoStorageService {
 			return Files.newInputStream(arquivoPath);
 		} catch (Exception e) {
 			throw new StorageException("Não foi possível recuperar arquivo.", e);
-		}
-	}
-
-	public MediaType retornaTipoDeMidia(String nomeArquivo) {
-
-		try {
-			Path caminhoArquivo = getArquivoPath(nomeArquivo);
-			MediaType mediaType = returnMediaType(nomeArquivo, caminhoArquivo);
-			
-			return mediaType;
-
-		} catch (Exception e) {
-			throw new StorageException("Não foi possível obter o tipo de mídia do arquivo.", e);
 		}
 	}
 

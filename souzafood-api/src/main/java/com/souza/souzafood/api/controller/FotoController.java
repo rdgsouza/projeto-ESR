@@ -1,7 +1,9 @@
 package com.souza.souzafood.api.controller;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLConnection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,46 +19,61 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.souza.souzafood.domain.exception.EntidadeNaoEncontradaException;
 import com.souza.souzafood.domain.service.FotoStorageService;
-import com.souza.souzafood.infrastructure.service.storage.LocalFotoStorageService;
+import com.souza.souzafood.infrastructure.service.storage.StorageException;
 
 @Controller
 @RequestMapping("/home/rodrigo/Documents/catalago/{nomeArquivo}")
 public class FotoController {
 
 	@Autowired
-	private LocalFotoStorageService localFotoStorage;		
-	
-	@Autowired
 	private FotoStorageService fotoStorage;
-	
+
 	@GetMapping
 	public ResponseEntity<InputStreamResource> servirFoto(@PathVariable String nomeArquivo,
-			@RequestHeader(name = "accept") String acceptHeader)  
-					throws IOException , HttpMediaTypeNotAcceptableException {
+			@RequestHeader(name = "accept") String acceptHeader)
+			throws IOException, HttpMediaTypeNotAcceptableException {
+		
 		try {
-		//Como não temos uma propiedade do tipo FotoProduto para fazer um fotoProduto.getContentType()
-		//Pegamos o contentType do arquivo a partir do nome do arquivo usando o metodo retornaTipoDeMidia
-			MediaType mediaTypeFoto = localFotoStorage.retornaTipoDeMidia(nomeArquivo);
-			List<MediaType> mediatypeAceitas = MediaType.parseMediaTypes(acceptHeader);
-			verificarCompatibilidadeMediaType(mediaTypeFoto, mediatypeAceitas);
-			
 			InputStream inputStream = fotoStorage.recuperar(nomeArquivo);
-            
-			return ResponseEntity.ok()
+			MediaType mediaTypeFoto = retornaTipoDeMediaType(inputStream, nomeArquivo);
+			List<MediaType> mediatypeAceitas = MediaType.parseMediaTypes(acceptHeader);
+
+			verificarCompatibilidadeMediaType(mediaTypeFoto, mediatypeAceitas);
+
+			return ResponseEntity
+					.ok()
 					.contentType(mediaTypeFoto)
 					.body(new InputStreamResource(inputStream));
 		} catch (EntidadeNaoEncontradaException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
-	private void verificarCompatibilidadeMediaType(MediaType mediaTypeFoto, 
-			List<MediaType> mediatypeAceitas) throws HttpMediaTypeNotAcceptableException {
-		
+
+	private void verificarCompatibilidadeMediaType(MediaType mediaTypeFoto, List<MediaType> mediatypeAceitas)
+			throws HttpMediaTypeNotAcceptableException {
+
 		boolean compativel = mediatypeAceitas.stream()
 				.anyMatch(mediaTypeAceita -> mediaTypeAceita.isCompatibleWith(mediaTypeFoto));
-		if(!compativel) {
+		if (!compativel) {
 			throw new HttpMediaTypeNotAcceptableException(mediatypeAceitas);
+		}
+	}
+
+	private MediaType retornaTipoDeMediaType(InputStream inputStream, String nomeArquivo) {
+
+		try {
+			InputStream is = fotoStorage.recuperar(nomeArquivo);
+			byte[] bytes = is.readAllBytes();
+
+			InputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+			String mediaType = URLConnection.guessContentTypeFromStream(byteArrayInputStream);
+			MediaType mediaTypeFoto = MediaType.parseMediaType(mediaType);
+
+			return mediaTypeFoto;
+
+		} catch (Exception e) {
+
+			throw new StorageException("Não foi possível obter o tipo de mídia do arquivo.", e);
 		}
 	}
 
