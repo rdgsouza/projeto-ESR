@@ -53,7 +53,9 @@ public class LocalFotoStorageService implements FotoStorageService {
 
 	private Path getArquivoPath(String nomeArquivo) {
 
-		return storageProperties.getLocal().getDiretorioFotos().resolve(Path.of(nomeArquivo));
+		return storageProperties.getLocal()
+				.getDiretorioFotos()
+				.resolve(Path.of(nomeArquivo));
 	}
 
 }
