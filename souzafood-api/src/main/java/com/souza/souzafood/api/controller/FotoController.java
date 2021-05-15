@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.souza.souzafood.domain.exception.EntidadeNaoEncontradaException;
 import com.souza.souzafood.domain.service.FotoStorageService;
+import com.souza.souzafood.domain.service.FotoStorageService.FotoRecuperada;
 import com.souza.souzafood.infrastructure.service.storage.StorageException;
 
 @Controller
@@ -28,14 +29,18 @@ public class FotoController {
 	@Autowired
 	private FotoStorageService fotoStorage;
 
+	private FotoRecuperada fotoRecuperada;
+	
 	@GetMapping
 	public ResponseEntity<InputStreamResource> servirFoto(@PathVariable String nomeArquivo,
 			@RequestHeader(name = "accept") String acceptHeader)
 			throws IOException, HttpMediaTypeNotAcceptableException {
 		
+		fotoRecuperada = fotoStorage.recuperar(nomeArquivo);
+
 		try {
-			InputStream inputStream = fotoStorage.recuperar(nomeArquivo);
-			MediaType mediaTypeFoto = retornaTipoDeMediaType(inputStream, nomeArquivo);
+
+			MediaType mediaTypeFoto = retornaTipoDeMediaType(fotoRecuperada.getInputStream());
 			List<MediaType> mediatypeAceitas = MediaType.parseMediaTypes(acceptHeader);
 
 			verificarCompatibilidadeMediaType(mediaTypeFoto, mediatypeAceitas);
@@ -43,7 +48,7 @@ public class FotoController {
 			return ResponseEntity
 					.ok()
 					.contentType(mediaTypeFoto)
-					.body(new InputStreamResource(inputStream));
+					.body(new InputStreamResource(fotoRecuperada.getInputStream()));
 		} catch (EntidadeNaoEncontradaException e) {
 			return ResponseEntity.notFound().build();
 		}
@@ -59,15 +64,18 @@ public class FotoController {
 		}
 	}
 
-	private MediaType retornaTipoDeMediaType(InputStream inputStream, String nomeArquivo) {
+	private MediaType retornaTipoDeMediaType(InputStream inputStream) {
 
 		try {
-			InputStream is = fotoStorage.recuperar(nomeArquivo);
-			byte[] bytes = is.readAllBytes();
+			byte[] bytes = inputStream.readAllBytes();
 
 			InputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
 			String mediaType = URLConnection.guessContentTypeFromStream(byteArrayInputStream);
 			MediaType mediaTypeFoto = MediaType.parseMediaType(mediaType);
+			
+			inputStream = new ByteArrayInputStream(bytes); //Converte novamente os bytes novamente para InputStream
+			fotoRecuperada.setInputStream(inputStream);//Precisa setar novamente o inputStream convertido se não ele
+			                                          //vai ficar vazio pois ele ainda estar em formato de byte 
 
 			return mediaTypeFoto;
 

@@ -1,13 +1,13 @@
 package com.souza.souzafood.api.controller;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +31,7 @@ import com.souza.souzafood.domain.model.Produto;
 import com.souza.souzafood.domain.service.CadastroProdutoService;
 import com.souza.souzafood.domain.service.CatalagoFotoProdutoService;
 import com.souza.souzafood.domain.service.FotoStorageService;
+import com.souza.souzafood.domain.service.FotoStorageService.FotoRecuperada;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos")
@@ -69,7 +70,7 @@ public class RestauranteProdutoFotoController {
 		return fotoProdutoModelAssembler.toModel(fotoSalva);
 
 	}
-
+    //Passando na requisição o Accept application/json cai aqui e: Busca as infomações da foto em formato JSON
 	@GetMapping(value = "/{produtoId}/foto", produces = MediaType.APPLICATION_JSON_VALUE)
 	public FotoProdutoModel buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
 
@@ -77,9 +78,11 @@ public class RestauranteProdutoFotoController {
 
 		return fotoProdutoModelAssembler.toModel(fotoProduto);
 	}
-
+	//Passando na requisição o Accept image/jpeg,image/png cai aqui e:
+	//Se a configuração da nossa api para buscar a foto for local então busca a foto no seu formato png ou jpeg
+	//Se a configuração da nossa api para buscar a foto for na S3 então busca a url da foto de armazenamento da foto na S3
 	@GetMapping(value = "/{produtoId}/foto")
-	public ResponseEntity<InputStreamResource> servir(@PathVariable Long restauranteId,
+	public ResponseEntity<?> servir(@PathVariable Long restauranteId,
 			@PathVariable Long produtoId, @RequestHeader(name = "accept") String acceptHeader) 
 				    throws HttpMediaTypeNotAcceptableException {
 		try {
@@ -90,8 +93,16 @@ public class RestauranteProdutoFotoController {
 // Aula: https://www.algaworks.com/aulas/2066/checando-media-type-ao-servir-arquivos-de-fotos					
 			verificarCompatibilidadeMediaType(mediaTypeFoto, mediatypeAceitas);
 			
-			InputStream inputStream = fotoStorage.recuperar(fotoProduto.getNomeArquivo());
-//OBS: Se você quiser que ao buscar a foto de um produto o download seja automatico em vez de aparecer no browser 
+			FotoRecuperada fotoRecuperada = fotoStorage.recuperar(fotoProduto.getNomeArquivo());
+
+			if(fotoRecuperada.temUrl()) {
+				return ResponseEntity
+						.status(HttpStatus.FOUND)
+						.header(HttpHeaders.LOCATION, fotoRecuperada.getUrl())
+						.build();
+			} else {
+			
+			//OBS: Se você quiser que ao buscar a foto de um produto o download seja automatico em vez de aparecer no browser 
 //Você pode implementar o codigo abaixo. Esse exemplo peguei da aula de geração de pdf onde o Thiago da essa dica. Mas nesse caso de imagem é bom 
 //que apareça no browser já que na maioria da vezes o usuário não vai precisar fazer o download da imagem.
 //			String nomeArquivo = fotoProduto.getNomeArquivo();			
@@ -105,8 +116,8 @@ public class RestauranteProdutoFotoController {
 			return ResponseEntity.ok()
 					.contentType(mediaTypeFoto)
 //					.headers(headers)
-					.body(new InputStreamResource(inputStream));
-			
+					.body(new InputStreamResource(fotoRecuperada.getInputStream()));
+		   }
 		} catch (EntidadeNaoEncontradaException e) {
 			return ResponseEntity.notFound().build();
 		}
