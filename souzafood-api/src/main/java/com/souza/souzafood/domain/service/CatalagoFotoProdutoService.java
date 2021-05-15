@@ -52,7 +52,9 @@ public class CatalagoFotoProdutoService {
 
 		NovaFoto novaFoto = NovaFoto.builder()
 				.nomeArquivo(foto.getNomeArquivo())
-				.inputStream(dadosIns).build();
+				.contentType(foto.getContentType())
+				.inputStream(dadosIns)
+				.build();
 
 		fotoStorage.substituir(nomeArquivoExistente, novaFoto);
 

@@ -2,12 +2,14 @@ package com.souza.souzafood.core.modelmapper;
 
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.souza.souzafood.api.model.EnderecoModel;
 import com.souza.souzafood.api.model.FotoProdutoModel;
 import com.souza.souzafood.api.model.input.ItemPedidoInput;
+import com.souza.souzafood.core.storage.StorageProperties;
 import com.souza.souzafood.domain.model.Endereco;
 import com.souza.souzafood.domain.model.FotoProduto;
 import com.souza.souzafood.domain.model.ItemPedido;
@@ -15,6 +17,9 @@ import com.souza.souzafood.domain.model.ItemPedido;
 @Configuration
 public class ModelMapperConfig {
 
+	@Autowired
+	private StorageProperties storageProperties;
+	
 	@Bean
 	public ModelMapper modelMapper() {
 		var modelMapper = new ModelMapper();
@@ -61,7 +66,20 @@ public class ModelMapperConfig {
 	}
 	
 	private String criarImagemUrl(String nomeArquivo) {
-		return "/home/rodrigo/Documents/catalago/" + nomeArquivo;
+
+		return  getCaminhoArquivoS3(nomeArquivo);
+	}
+
+	private String getCaminhoArquivoS3(String nomeArquivo) {
+		return String.format("%s/%s/%s", storageProperties.getS3().getUrlBuket(), storageProperties.getS3().getDiretorioFotos(), nomeArquivo);
 	}
 	
+	 //Metodo para retorna o caminho do arquivo quando for armazenado no disco local
+//	private String getCaminhoArquivoLocal(String nomeArquivo) {
+//		return String.format("%s/%s", storageProperties.getLocal().getDiretorioFotos(), nomeArquivo);
+//	}
+	
 }
+
+
+
