@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.souza.souzafood.api.model.EnderecoModel;
-import com.souza.souzafood.api.model.FotoProdutoModel;
+import com.souza.souzafood.api.model.UrlFotoProdutoModel;
 import com.souza.souzafood.api.model.input.ItemPedidoInput;
 import com.souza.souzafood.core.storage.StorageProperties;
 import com.souza.souzafood.domain.model.Endereco;
@@ -58,9 +58,9 @@ public class ModelMapperConfig {
 
 		Converter<String, String> imagemParaUrl = ctx -> criarImagemUrl(ctx.getSource());
 		
-		modelMapper.createTypeMap(FotoProduto.class, FotoProdutoModel.class)
+		modelMapper.createTypeMap(FotoProduto.class, UrlFotoProdutoModel.class)
 				.addMappings(mapper -> mapper.using(imagemParaUrl)
-						.map(FotoProduto::getNomeArquivo, FotoProdutoModel::setUrl));
+						.map(FotoProduto::getNomeArquivo, UrlFotoProdutoModel::setUrl));
 		
 		return modelMapper;
 	}

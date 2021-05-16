@@ -5,11 +5,12 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class FotoProdutoModel {
+public class UrlFotoProdutoModel {
 
 	private String nomeArquivo;
 	private String descricao;
 	private String contentType;
 	private Long tamanho;
+	private String url;
 
 }

@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.souza.souzafood.api.assembler.FotoProdutoModelAssembler;
+import com.souza.souzafood.api.assembler.UrlFotoProdutoModelAssembler;
 import com.souza.souzafood.api.model.FotoProdutoModel;
+import com.souza.souzafood.api.model.UrlFotoProdutoModel;
 import com.souza.souzafood.api.model.input.FotoProdutoInput;
 import com.souza.souzafood.domain.exception.EntidadeNaoEncontradaException;
 import com.souza.souzafood.domain.model.FotoProduto;
@@ -46,6 +48,9 @@ public class RestauranteProdutoFotoController {
 	@Autowired
 	private FotoProdutoModelAssembler fotoProdutoModelAssembler;
 
+	@Autowired
+	private UrlFotoProdutoModelAssembler urlFotoProdutoModelAssembler;
+	
 	@Autowired
 	private FotoStorageService fotoStorage;
 	
@@ -120,15 +125,15 @@ public class RestauranteProdutoFotoController {
 		   }
 		} catch (EntidadeNaoEncontradaException e) {
 			return ResponseEntity.notFound().build();
-		}
+	  }
  
 	}
 	
 	@GetMapping(value = "/fotos", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<FotoProdutoModel> buscarFotos(@PathVariable Long restauranteId) {
+	public List<UrlFotoProdutoModel> buscarFotos(@PathVariable Long restauranteId) {
 		List<FotoProduto> fotoProdutos = catalagoFotoProduto.buscarTodos(restauranteId);
 		
-		return fotoProdutoModelAssembler.toModelList(fotoProdutos);
+		return urlFotoProdutoModelAssembler.toModelList(fotoProdutos);
 	}
 
 	private void verificarCompatibilidadeMediaType(MediaType mediaTypeFoto, 

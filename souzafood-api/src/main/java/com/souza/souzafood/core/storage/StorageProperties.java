@@ -6,7 +6,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import com.amazonaws.regions.Regions;
-import com.amazonaws.services.s3.model.Region;
 
 import lombok.Getter;
 import lombok.Setter;
