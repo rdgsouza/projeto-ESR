@@ -26,7 +26,7 @@ public interface FotoStorageService {
 	default String pegarExtensaoArquivo(String nomeOriginalArquivo) {
         if (nomeOriginalArquivo.contains("."))
             return nomeOriginalArquivo.substring(nomeOriginalArquivo.lastIndexOf(".") + 0);
-        else
+        else 
             return "";
     }
 	
