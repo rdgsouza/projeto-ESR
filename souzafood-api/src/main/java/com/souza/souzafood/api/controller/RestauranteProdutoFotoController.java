@@ -110,10 +110,10 @@ public class RestauranteProdutoFotoController {
 			//OBS: Se você quiser que ao buscar a foto de um produto o download seja automatico em vez de aparecer no browser 
 //Você pode implementar o codigo abaixo. Esse exemplo peguei da aula de geração de pdf onde o Thiago da essa dica. Mas nesse caso de imagem é bom 
 //que apareça no browser já que na maioria da vezes o usuário não vai precisar fazer o download da imagem.
-//			String nomeArquivo = fotoProduto.getNomeArquivo();			
-//			var headers = new HttpHeaders();
-//			headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" 
-//			      + nomeArquivo.substring(37) + "\""); //Caso queira que tire o UUID do nome do arquivo na hora de faze o download da imagem
+//String nomeArquivo = fotoProduto.getNomeArquivo();			
+//var headers = new HttpHeaders();
+//headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" 
+//+ nomeArquivo.substring(37) + "\""); //Caso queira que tire o UUID do nome do arquivo na hora de faze o download da imagem
 //Obs: Acima usamos a barra invertida como caractere de escape para concatenar a propiedade filename com o nome do aquivo da foto.
 //Para quando fazer o download da imagem venha com o nome original.		
 //fonte do caractere de escape: https://stackoverflow.com/questions/93551/how-to-encode-the-filename-parameter-of-content-disposition-header-in-http			
