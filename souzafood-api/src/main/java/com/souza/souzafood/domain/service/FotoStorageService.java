@@ -28,7 +28,7 @@ public interface FotoStorageService {
             return nomeOriginalArquivo.substring(nomeOriginalArquivo.lastIndexOf(".") + 0);
         else 
             return "";
-     }
+    }
 	
 	default String gerarNovoNomeArquivo(String nomeOriginalArquivo) throws IOException {
 		
