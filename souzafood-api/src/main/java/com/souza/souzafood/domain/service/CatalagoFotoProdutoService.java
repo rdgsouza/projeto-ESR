@@ -95,14 +95,14 @@ public class CatalagoFotoProdutoService {
 		if (fotoStorage.pegarExtensaoArquivo(foto.getNomeArquivo()) == "") {
 			if (mediaType == "image/png") {
 				String nomeNovoArquivoPng = fotoStorage.gerarNovoNomeArquivo(foto.getNomeArquivo());
-				foto.setNomeArquivo(nomeNovoArquivoPng.concat("png"));
+				foto.setNomeArquivo(nomeNovoArquivoPng.concat(".png"));
 				foto.setContentType(mediaType);
 				return byteArrayInputStream;
 			}
 
 			if (mediaType == "image/jpeg") {
 				String nomeNovoArquivojpeg = fotoStorage.gerarNovoNomeArquivo(foto.getNomeArquivo());
-				nomeNovoArquivojpeg = nomeNovoArquivojpeg.concat("jpeg");
+				nomeNovoArquivojpeg = nomeNovoArquivojpeg.concat(".jpeg");
 				foto.setNomeArquivo(nomeNovoArquivojpeg);
 				foto.setContentType(mediaType);
 				return byteArrayInputStream;

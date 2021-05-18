@@ -25,14 +25,14 @@ public interface FotoStorageService {
 
 	default String pegarExtensaoArquivo(String nomeOriginalArquivo) {
         if (nomeOriginalArquivo.contains("."))
-            return nomeOriginalArquivo.substring(nomeOriginalArquivo.lastIndexOf(".") + 1);
+            return nomeOriginalArquivo.substring(nomeOriginalArquivo.lastIndexOf(".") + 0);
         else
             return "";
     }
 	
 	default String gerarNovoNomeArquivo(String nomeOriginalArquivo) throws IOException {
 		
-		return UUID.randomUUID().toString() + "_n." + pegarExtensaoArquivo(nomeOriginalArquivo);
+		return UUID.randomUUID().toString() + "_n" + pegarExtensaoArquivo(nomeOriginalArquivo);
 	}
 	
 	
