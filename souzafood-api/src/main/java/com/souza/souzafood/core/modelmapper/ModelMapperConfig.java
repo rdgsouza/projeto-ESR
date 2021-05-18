@@ -10,6 +10,7 @@ import com.souza.souzafood.api.model.EnderecoModel;
 import com.souza.souzafood.api.model.UrlFotoProdutoModel;
 import com.souza.souzafood.api.model.input.ItemPedidoInput;
 import com.souza.souzafood.core.storage.StorageProperties;
+import com.souza.souzafood.core.storage.StorageProperties.TipoStorage;
 import com.souza.souzafood.domain.model.Endereco;
 import com.souza.souzafood.domain.model.FotoProduto;
 import com.souza.souzafood.domain.model.ItemPedido;
@@ -19,7 +20,7 @@ public class ModelMapperConfig {
 
 	@Autowired
 	private StorageProperties storageProperties;
-	
+
 	@Bean
 	public ModelMapper modelMapper() {
 		var modelMapper = new ModelMapper();
@@ -40,8 +41,11 @@ public class ModelMapperConfig {
 //E ta errado porque o id do itemPedido é AUTO INCREMENT. Então nos atribuimos um id para propiedade produtoId da classe ItemPedidoInput 
 //mas não podemos deixar que o modellMapper intenda que é o id itemPedido e tentar atribuir na hora hora da copia
 //Para resolver esse problema fizemos da seguinte forma:
-		modelMapper.createTypeMap(ItemPedidoInput.class, ItemPedido.class)//Faz o mapeamento de ItemPedidoInput para ItemPedido
-				.addMappings(mapper -> mapper.skip(ItemPedido::setId));//Mas faz um (skip = pula) ignora o mapeamento para o setId ou seja não chama o setId da entidade 
+		modelMapper.createTypeMap(ItemPedidoInput.class, ItemPedido.class)// Faz o mapeamento de ItemPedidoInput para
+																			// ItemPedido
+				.addMappings(mapper -> mapper.skip(ItemPedido::setId));// Mas faz um (skip = pula) ignora o mapeamento
+																		// para o setId ou seja não chama o setId da
+																		// entidade
 //ItemPedido. Quando fazemos isso estamos dizendo para o modelMapper não atribuir aquele produtoId para ele não ir para o id de ItemPedido com isso evitamos a exception: não pode salvar um detached item pedido
 
 //Aqui fizemos o uso do enderecoToEnderecoModelTypeMap de uma forma mas profunda porque precisamos
@@ -49,37 +53,35 @@ public class ModelMapperConfig {
 //RestauranteModel o endereço aninhado com estado queremos apenas o nome do estado para isso fizemos essa busca		
 //que no final vair apenas pegar o nome do estado para passar para propiedade que não é mais uma propiedade de instância do tipo estado e sim uma propiedade
 //do tipo String na entidade CidadeResumoModel		
-		var enderecoToEnderecoModelTypeMap = modelMapper
-				.createTypeMap(Endereco.class, EnderecoModel.class);
+		var enderecoToEnderecoModelTypeMap = modelMapper.createTypeMap(Endereco.class, EnderecoModel.class);
 
-		enderecoToEnderecoModelTypeMap
-		         .<String>addMapping(src -> src.getCidade().getEstado().getNome(),
-				 (enderecoModelDest, value) -> enderecoModelDest.getCidade().setEstado(value));
+		enderecoToEnderecoModelTypeMap.<String>addMapping(src -> src.getCidade().getEstado().getNome(),
+				(enderecoModelDest, value) -> enderecoModelDest.getCidade().setEstado(value));
 
 		Converter<String, String> imagemParaUrl = ctx -> criarImagemUrl(ctx.getSource());
-		
-		modelMapper.createTypeMap(FotoProduto.class, UrlFotoProdutoModel.class)
-				.addMappings(mapper -> mapper.using(imagemParaUrl)
-						.map(FotoProduto::getNomeArquivo, UrlFotoProdutoModel::setUrl));
-		
+
+		modelMapper.createTypeMap(FotoProduto.class, UrlFotoProdutoModel.class).addMappings(
+				mapper -> mapper.using(imagemParaUrl).map(FotoProduto::getNomeArquivo, UrlFotoProdutoModel::setUrl));
+
 		return modelMapper;
 	}
-	
-	private String criarImagemUrl(String nomeArquivo) {
 
-		return  getCaminhoArquivoS3(nomeArquivo);
+	private String criarImagemUrl(String nomeArquivo) {
+		if (TipoStorage.S3.equals(storageProperties.getTipo())) {
+			return getCaminhoArquivoS3(nomeArquivo);
+		} else {
+			return getCaminhoArquivoLocal(nomeArquivo);
+		}
 	}
 
 	private String getCaminhoArquivoS3(String nomeArquivo) {
-		return String.format("%s/%s/%s", storageProperties.getS3().getUrlBuket(), storageProperties.getS3().getDiretorioFotos(), nomeArquivo);
+		return String.format("%s/%s/%s", storageProperties.getS3().getUrlBuket(),
+				storageProperties.getS3().getDiretorioFotos(), nomeArquivo);
 	}
-	
-	 //Metodo para retorna o caminho do arquivo quando for armazenado no disco local
-//	private String getCaminhoArquivoLocal(String nomeArquivo) {
-//		return String.format("%s/%s", storageProperties.getLocal().getDiretorioFotos(), nomeArquivo);
-//	}
-	
+
+	// Metodo para retorna o caminho do arquivo quando for armazenado no disco local
+	private String getCaminhoArquivoLocal(String nomeArquivo) {
+		return String.format("%s/%s", storageProperties.getLocal().getDiretorioFotos(), nomeArquivo);
+	}
+
 }
-
-
-

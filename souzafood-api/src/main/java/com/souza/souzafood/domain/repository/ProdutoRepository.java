@@ -31,4 +31,5 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long>, Produto
 	@Query("select f from FotoProduto f join f.produto p "
 			+ "where p.restaurante.id = :restauranteId")
 	List<FotoProduto> findAllRestauranteById(Long restauranteId);
+	
 }

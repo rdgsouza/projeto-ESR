@@ -62,14 +62,14 @@ public class RestauranteProdutoFotoController {
 		Produto produto = cadastroProduto.buscarOuFalhar(restauranteId, produtoId);
 
 		MultipartFile arquivo = fotoProdutoInput.getArquivo();
-
+       		
 		FotoProduto foto = new FotoProduto();
 		foto.setProduto(produto);
 		foto.setDescricao(fotoProdutoInput.getDescricao());
 		foto.setContentType(arquivo.getContentType());
 		foto.setTamanho(arquivo.getSize());
 		foto.setNomeArquivo(arquivo.getOriginalFilename());
-
+		
 		FotoProduto fotoSalva = catalagoFotoProduto.salvar(foto, arquivo.getInputStream());
 
 		return fotoProdutoModelAssembler.toModel(fotoSalva);

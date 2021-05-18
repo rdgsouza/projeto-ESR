@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.souza.souzafood.domain.exception.FotoProdutoNaoEncontradaException;
 import com.souza.souzafood.domain.model.FotoProduto;
+import com.souza.souzafood.domain.repository.FotoRepository;
 import com.souza.souzafood.domain.repository.ProdutoRepository;
 import com.souza.souzafood.domain.service.FotoStorageService.NovaFoto;
 import com.souza.souzafood.infrastructure.service.storage.StorageException;
@@ -23,6 +24,9 @@ public class CatalagoFotoProdutoService {
 
 	@Autowired
 	private ProdutoRepository produtoRepository;
+	
+	@Autowired
+	private FotoRepository fotoRepository;
 
 	@Autowired
 	private FotoStorageService fotoStorage;
@@ -78,6 +82,10 @@ public class CatalagoFotoProdutoService {
 		return produtoRepository.findAllRestauranteById(restauranteId);
 	}
 
+	public FotoProduto buscaFotoPorNome(String nomeArquivo) {
+	 return fotoRepository.findFotoProdutoByNomeArquivo(nomeArquivo)
+				.orElseThrow(() -> new FotoProdutoNaoEncontradaException(nomeArquivo));
+	}
 	private InputStream verificaFotoSemExtensao(FotoProduto foto, InputStream dadosArquivo) throws IOException {
 
 		byte[] bytes = dadosArquivo.readAllBytes();

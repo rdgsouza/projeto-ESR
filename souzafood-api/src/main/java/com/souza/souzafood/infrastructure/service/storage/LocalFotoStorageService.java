@@ -9,7 +9,6 @@ import org.springframework.util.FileCopyUtils;
 import com.souza.souzafood.core.storage.StorageProperties;
 import com.souza.souzafood.domain.service.FotoStorageService;
 
-//@Service
 public class LocalFotoStorageService implements FotoStorageService {
 
 	@Autowired
