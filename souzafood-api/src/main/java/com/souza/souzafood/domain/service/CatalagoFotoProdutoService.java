@@ -86,12 +86,12 @@ public class CatalagoFotoProdutoService {
 	 return fotoRepository.findFotoProdutoByNomeArquivo(nomeArquivo)
 				.orElseThrow(() -> new FotoProdutoNaoEncontradaException(nomeArquivo));
 	}
+	
 	private InputStream verificaFotoSemExtensao(FotoProduto foto, InputStream dadosArquivo) throws IOException {
 
-		byte[] bytes = dadosArquivo.readAllBytes();
-		InputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
-		String mediaType = URLConnection.guessContentTypeFromStream(byteArrayInputStream);
-
+		InputStream byteArrayInputStream = new ByteArrayInputStream(dadosArquivo.readAllBytes());
+		String mediaType = URLConnection.guessContentTypeFromStream(byteArrayInputStream);		
+		
 		if (fotoStorage.pegarExtensaoArquivo(foto.getNomeArquivo()) == "") {
 			if (mediaType == "image/png") {
 				String nomeNovoArquivoPng = fotoStorage.gerarNovoNomeArquivo(foto.getNomeArquivo());
