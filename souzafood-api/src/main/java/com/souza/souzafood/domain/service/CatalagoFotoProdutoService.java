@@ -14,10 +14,10 @@ import org.springframework.stereotype.Service;
 
 import com.souza.souzafood.domain.exception.FotoProdutoNaoEncontradaException;
 import com.souza.souzafood.domain.model.FotoProduto;
+import com.souza.souzafood.domain.model.MediaTypes;
 import com.souza.souzafood.domain.repository.FotoRepository;
 import com.souza.souzafood.domain.repository.ProdutoRepository;
 import com.souza.souzafood.domain.service.FotoStorageService.NovaFoto;
-import com.souza.souzafood.infrastructure.service.storage.StorageException;
 
 @Service
 public class CatalagoFotoProdutoService {
@@ -30,7 +30,7 @@ public class CatalagoFotoProdutoService {
 
 	@Autowired
 	private FotoStorageService fotoStorage;
-
+		
 	@Transactional
 	public FotoProduto salvar(FotoProduto foto, InputStream dadosArquivo) throws IOException {
 
@@ -93,32 +93,16 @@ public class CatalagoFotoProdutoService {
 		String mediaType = URLConnection.guessContentTypeFromStream(byteArrayInputStream);		
 		
 		if (fotoStorage.pegarExtensaoArquivo(foto.getNomeArquivo()) == "") {
-			if (mediaType == "image/png") {
-				String nomeNovoArquivoPng = fotoStorage.gerarNovoNomeArquivo(foto.getNomeArquivo());
-				foto.setNomeArquivo(nomeNovoArquivoPng.concat(".png"));
-				foto.setContentType(mediaType);
-				return byteArrayInputStream;
-			}
-
-			if (mediaType == "image/jpeg") {
-				String nomeNovoArquivojpeg = fotoStorage.gerarNovoNomeArquivo(foto.getNomeArquivo());
-				nomeNovoArquivojpeg = nomeNovoArquivojpeg.concat(".jpeg");
-				foto.setNomeArquivo(nomeNovoArquivojpeg);
-				foto.setContentType(mediaType);
-				return byteArrayInputStream;
-			}
-
-			try {
-				if (mediaType != "image/png" || mediaType != "image/jpeg") {
-					throw new Exception();
-				}
-			} catch (Exception e) {
-			// OBS***: Customizar com uma resposta e um status melhor. Criar uma exception Storage na
-			// classe ApiExceptionHandler
-				throw new StorageException("A foto deve ser do tipo JPG ou PNG.", e);
-			}
-		}	
-
+		  MediaTypes mt = MediaTypes.PNG;
+          String ext =  mt.retornaExtensao(mediaType);
+			
+			String nomeNovoArquivoPng = fotoStorage.gerarNovoNomeArquivo(foto.getNomeArquivo());
+			foto.setNomeArquivo(nomeNovoArquivoPng.concat(ext));
+			foto.setContentType(mediaType);
+			
+			return byteArrayInputStream;
+		}
+		
 		return byteArrayInputStream;
 	}
 }
