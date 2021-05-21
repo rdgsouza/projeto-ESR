@@ -81,7 +81,7 @@ public class S3FotoStorageService implements FotoStorageService {
 	}
 
 	private String getCaminhoArquivo(String nomeArquivo) {
-		return String.format("%s/%s", storageProperties.getS3().getDiretorioFotos(), nomeArquivo);
+			return String.format("%s/%s", storageProperties.getS3().getDiretorioFotos(), nomeArquivo);
 	}
 
 }
