@@ -13,16 +13,16 @@ public class FluxoPedidoService {
  
 	@Autowired
 	private EmissaoPedidoService emissaoPedido;
-
-	@Autowired
-	private EnvioEmailService envioEmail;
-	
+ 
+	@Autowired    
+	private EnvioEmailService envioEmail; 
+	 
 	@Transactional
 	public void confirmar(String codigoPedido) {
 		
 		Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
 		pedido.confirmar();
-		
+		  
 //      Caso precise que a propiedade souzafood.email.remetente= do application.properties fique dinamica
 //	    Implementação feita no forum e suporte https://www.algaworks.com/forum/topicos/84402/duvida-na-propiedade-remetente#90859	
 //		String remetente = String.format("%s %s", "SouzaFood", "<souzaafood@gmail.com>");

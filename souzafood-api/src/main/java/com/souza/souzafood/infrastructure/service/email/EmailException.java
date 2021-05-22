@@ -1,4 +1,4 @@
-package com.souza.souzafood.domain.service.email;
+package com.souza.souzafood.infrastructure.service.email;
 
 public class EmailException extends RuntimeException{
 
