@@ -3,6 +3,7 @@ package com.souza.souzafood.domain.model;
 import java.util.Arrays;
 import java.util.List;
 
+// Aula: https://www.algaworks.com/aulas/2030/refatorando-o-codigo-de-regras-para-transicao-de-status-de-pedidos
 public enum StatusPedido {
 
 	CRIADO("Criado"),

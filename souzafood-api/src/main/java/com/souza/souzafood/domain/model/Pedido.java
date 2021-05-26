@@ -21,17 +21,20 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.souza.souzafood.domain.event.PedidoCanceladoEvent;
+import com.souza.souzafood.domain.event.PedidoConfirmadoEvent;
 import com.souza.souzafood.domain.exception.NegocioException;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
-public class Pedido {
+public class Pedido extends AbstractAggregateRoot<Pedido>{
 
 	@EqualsAndHashCode.Include
 	@Id
@@ -107,8 +110,15 @@ public class Pedido {
 	  }
 	
 	public void confirmar() {
+//	Metodo setStatus criado na classe pedido para não ser alterado o status de fora da classe
+//	E foi chamado o metodo naoPodeAlterarPara para fazer uma verificação na regra de status 
+//	que foi implementa no Enum StatusPedido.
+//	Aula: https://www.algaworks.com/aulas/2030/refatorando-o-codigo-de-regras-para-transicao-de-status-de-pedidos
 		  setStatus(StatusPedido.CONFIRMADO);
 		  setDataConfirmacao(OffsetDateTime.now());
+		  
+		  registerEvent(new PedidoConfirmadoEvent(this));
+		  
 	}
 
 	public void entregar() {
@@ -119,6 +129,7 @@ public class Pedido {
 	public void cancelar() {
 		  setStatus(StatusPedido.CANCELADO);
 		  setDataCancelamento(OffsetDateTime.now());
+		  registerEvent(new PedidoCanceladoEvent(this));
 	}
 	
 	private void setStatus(StatusPedido novoStatus) {
