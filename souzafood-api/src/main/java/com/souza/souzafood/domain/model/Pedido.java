@@ -116,7 +116,7 @@ public class Pedido extends AbstractAggregateRoot<Pedido>{
 //	Aula: https://www.algaworks.com/aulas/2030/refatorando-o-codigo-de-regras-para-transicao-de-status-de-pedidos
 		  setStatus(StatusPedido.CONFIRMADO);
 		  setDataConfirmacao(OffsetDateTime.now());
-		  
+
 		  registerEvent(new PedidoConfirmadoEvent(this));
 		  
 	}
