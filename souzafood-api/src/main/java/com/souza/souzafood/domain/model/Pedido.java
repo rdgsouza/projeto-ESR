@@ -32,8 +32,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false) //Sobre a propiedade callSuper = false, Aula: https://www.algaworks.com/aulas/2090/publicando-domain-events-a-partir-do-aggregate-root 
 @Entity
+// Nos usamos eventos para quando um pedido for confirmado logo em seguida ser enviado um e-mail
+// Pra gente registrar um evento nos temos que herdar a classe AbstractAggregateRoot
+// Aula: https://www.algaworks.com/aulas/2090/publicando-domain-events-a-partir-do-aggregate-root
 public class Pedido extends AbstractAggregateRoot<Pedido>{
 
 	@EqualsAndHashCode.Include

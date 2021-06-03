@@ -104,7 +104,7 @@ public class PedidoController {
 			// TODO pegar usuário autenticado
 			novoPedido.setCliente(new Usuario());
 			novoPedido.getCliente().setId(1L);
-
+// Implementação do metodo emitir em https://www.algaworks.com/aulas/2027/desafio-implementando-o-endpoint-de-emissao-de-pedidos
 			novoPedido = emissaoPedido.emitir(novoPedido);
 
 			return pedidoModelAssembler.toModel(novoPedido);
