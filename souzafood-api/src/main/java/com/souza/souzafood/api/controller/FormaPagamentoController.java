@@ -1,5 +1,6 @@
 package com.souza.souzafood.api.controller;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
 import com.souza.souzafood.api.assembler.FormaPagamentoInputDisassembler;
 import com.souza.souzafood.api.assembler.FormaPagamentoModelAssembler;
@@ -44,14 +47,35 @@ public class FormaPagamentoController {
     private FormaPagamentoInputDisassembler formaPagamentoInputDisassembler;
     
     @GetMapping
-    public ResponseEntity<List<FormaPagamentoModel>> listar() {
+    public ResponseEntity<List<FormaPagamentoModel>> listar(ServletWebRequest request) {
+// Desabilita o filtro ShallowEtagHeaderFilter. Aula: https://www.algaworks.com/aulas/2114/implementando-requisicoes-condicionais-com-deep-etags
+    	ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
+    	
+    	String eTag = "0";
+    	
+    	OffsetDateTime dataUltimaAtualizacao = formaPagamentoRepository.getDataUltimaAtualizacao();
+
+    	if(dataUltimaAtualizacao != null) {
+    		eTag = String.valueOf(dataUltimaAtualizacao.toEpochSecond()); 
+    	}
+    	
+    	if(request.checkNotModified(eTag)) {
+    		return null;
+    	}
+    	
         List<FormaPagamento> todasFormasPagamentos = formaPagamentoRepository.findAll();
         
         List<FormaPagamentoModel> formasPagamentosModel = formaPagamentoModelAssembler
         		.toCollectionModel(todasFormasPagamentos);
         
         return ResponseEntity.ok()
-        		.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+// Sobre o .cacheControl. Aula: https://www.algaworks.com/aulas/2107/habilitando-o-cache-com-o-cabecalho-cache-control-e-a-diretiva-max-age
+//        		.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+//        		.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePrivate)
+        		.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic())
+//        		.cacheControl(CacheControl.noCache())
+//        		.cacheControl(CacheControl.noStore())
+        		.eTag(eTag) //Metodo para adicionar o eTag no cabeçalho da respospa http. Aula: https://www.algaworks.com/aulas/2114/implementando-requisicoes-condicionais-com-deep-etags
         		.body(formasPagamentosModel);
         		
     }

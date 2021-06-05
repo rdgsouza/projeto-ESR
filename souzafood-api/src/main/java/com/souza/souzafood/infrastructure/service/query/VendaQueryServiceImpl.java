@@ -31,6 +31,7 @@ public class VendaQueryServiceImpl implements VendaQueryService {
 		var root = query.from(Pedido.class);
 		var predicates = new ArrayList<Predicate>();
 
+//	Trantando o time offset. Aula: https://www.algaworks.com/aulas/2048/tratando-time-offset-na-agregacao-de-vendas-diarias-por-data
 		var functionConvertTzDataCriacao = builder.function(
 				"convert_tz", Date.class, root.get("dataCriacao"),
 				builder.literal("+00:00"), builder.literal(timeOffset));

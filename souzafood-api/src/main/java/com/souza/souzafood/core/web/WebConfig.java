@@ -17,7 +17,6 @@ public class WebConfig implements WebMvcConfigurer {
 		registry.addMapping("/**").allowedMethods("*");
 //		     .allowedOrigins("*")
 //		.maxAge(30);   
-
 	}
 
 	@Bean

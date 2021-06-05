@@ -30,7 +30,8 @@ public class CadastroCozinhaService {
 	public void excluir(Long cozinhaId) {
 		try {
 			cozinhaRepository.deleteById(cozinhaId);
-            cozinhaRepository.flush();
+// Sobre o metodo flush. Aula: https://www.algaworks.com/aulas/2006/corrigindo-bug-de-tratamento-de-exception-de-integridade-de-dados-com-flush-do-jpa
+			cozinhaRepository.flush();
             
 		} catch (EmptyResultDataAccessException e) {
 			throw new CozinhaNaoEncontradaException(cozinhaId);
