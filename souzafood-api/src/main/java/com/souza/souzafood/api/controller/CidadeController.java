@@ -26,6 +26,9 @@ import com.souza.souzafood.domain.model.Cidade;
 import com.souza.souzafood.domain.repository.CidadeRepository;
 import com.souza.souzafood.domain.service.CadastroCidadeService;
 
+import io.swagger.annotations.Api;
+
+@Api(tags = "Cidades")
 @RestController
 @RequestMapping(value = "/cidades")
 public class CidadeController {

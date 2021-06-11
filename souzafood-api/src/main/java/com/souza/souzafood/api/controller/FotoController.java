@@ -20,6 +20,8 @@ import com.souza.souzafood.domain.service.CatalagoFotoProdutoService;
 import com.souza.souzafood.domain.service.FotoStorageService;
 import com.souza.souzafood.domain.service.FotoStorageService.FotoRecuperada;
 
+//Solução implementada para listar fotos de todos os produos de um restaurante
+// Fórum AlgaWorks: https://www.algaworks.com/forum/topicos/84056/lista-de-fotos-curiosidade
 @Controller
 @RequestMapping("/home/rodrigo/Documents/catalago/{nomeArquivo}")
 public class FotoController {
