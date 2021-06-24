@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.souza.souzafood.domain.model.Cidade;
+
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -24,7 +26,10 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 //	Aula: https://www.algaworks.com/aulas/2120/selecionando-os-endpoints-da-api-para-gerar-a-documentacao
 	@Bean
 	public Docket apiDocket() {
-
+//		Class[] clazz = {Cidade.class};//Você pode fazer com que o swagger não faça o escaneamento de
+//		uma classe para não aparecer na documentação da OpenApi da sua API. Você pode colocar mais de uma classe no Array
+//		e em seguida acrescentar o .ignoredParameterTypes abaixo
+//		fonte: https://stackoverflow.com/questions/46651381/is-there-a-way-i-can-stop-springfox-swagger-from-scanning-the-model-classes
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
 				.apis(RequestHandlerSelectors.basePackage("com.souza.souzafood.api"))
@@ -34,6 +39,7 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				.build()
 				.apiInfo(apiInfo())
 				.tags(new Tag("Cidades", "Gerencia as cidades"));
+//				.ignoredParameterTypes(clazz);
 		         
 	}
 

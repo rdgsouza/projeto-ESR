@@ -98,7 +98,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 		ProblemType problemType = ProblemType.ERRO_DE_SISTEMA;
 		String detail = MSG_ERRO_GENERICA_USUARIO_FINAL;
-
+       
 		// Importante colocar o printStackTrace (pelo menos por enquanto, que não
 		// estamos fazendo logging) para mostrar a stacktrace no console
 		// Se não fizer isso, você não vai ver a stacktrace de exceptions que seriam

@@ -24,7 +24,8 @@ import com.souza.souzafood.domain.model.Restaurante;
 // Resposta: https://www.algaworks.com/forum/topicos/79816/errata
 
 //    @Query("select distinct r from Restaurante r left join fetch r.cozinha left join fetch r.formasPagamento")
-	  @Query("select distinct r from Restaurante r left join fetch r.cozinha")
+	  @Override
+	@Query("select distinct r from Restaurante r left join fetch r.cozinha")
 	 List<Restaurante> findAll(); 
 	 
     List<Restaurante> queryByTaxaFreteBetween(BigDecimal taxaInicial, BigDecimal taxaFinal);
