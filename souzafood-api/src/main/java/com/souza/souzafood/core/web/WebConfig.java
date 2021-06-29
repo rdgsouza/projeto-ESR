@@ -19,6 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
 //		.maxAge(30);   
 	}
 
+//	https://app.algaworks.com/aulas/2110/implementando-requisicoes-condicionais-com-shallow-etags
 	@Bean
 	public Filter shallowEtagHeaderFilter() {
 		return new ShallowEtagHeaderFilter();
