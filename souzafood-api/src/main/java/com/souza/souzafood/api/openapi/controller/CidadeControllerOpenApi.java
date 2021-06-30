@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
+//https://app.algaworks.com/aulas/2132/desacoplando-anotacoes-do-swagger-dos-controladores
 @Api(tags = "Cidades")
 public interface CidadeControllerOpenApi {
 

@@ -33,6 +33,9 @@ import com.souza.souzafood.domain.repository.PedidoRepository;
 import com.souza.souzafood.domain.service.EmissaoPedidoService;
 import com.souza.souzafood.infrastructure.repository.spec.PedidoSpecs;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+
 @RestController
 @RequestMapping(value = "/pedidos")
 public class PedidoController {
@@ -72,6 +75,10 @@ public class PedidoController {
 //        return pedidosWrapper;
 //	}
 	
+	@ApiImplicitParams({
+		@ApiImplicitParam(value = "Nomes das propiedades para filtrar na resposta, separados por vírgula",
+				name = "campos", paramType = "query", type = "string")
+	})
 	@GetMapping
 	public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro, 
 	        @PageableDefault(size = 10) Pageable pageable) {
@@ -89,6 +96,10 @@ public class PedidoController {
 	    return pedidosResumoModelPage;
 	}
 
+	@ApiImplicitParams({
+		@ApiImplicitParam(value = "Nomes das propiedades para filtrar na resposta, separados por vírgula",
+				name = "campos", paramType = "query", type = "string")
+	})
 	@GetMapping("/{codigoPedido}")
 	public PedidoModel buscar(@PathVariable String codigoPedido) {
 		Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);

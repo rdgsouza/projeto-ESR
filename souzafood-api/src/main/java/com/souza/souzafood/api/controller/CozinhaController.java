@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,13 +25,14 @@ import com.souza.souzafood.api.assembler.CozinhaInputDisassembler;
 import com.souza.souzafood.api.assembler.CozinhaModelAssembler;
 import com.souza.souzafood.api.model.CozinhaModel;
 import com.souza.souzafood.api.model.input.CozinhaInput;
+import com.souza.souzafood.api.openapi.controller.CozinhaControllerOpenApi;
 import com.souza.souzafood.domain.model.Cozinha;
 import com.souza.souzafood.domain.repository.CozinhaRepository;
 import com.souza.souzafood.domain.service.CadastroCozinhaService;
 
 @RestController
-@RequestMapping(value = "/cozinhas") //, produces = MediaType.APPLICATION_JSON_VALUE)
-public class CozinhaController {
+@RequestMapping(value = "/cozinhas", produces = MediaType.APPLICATION_JSON_VALUE)
+public class CozinhaController implements CozinhaControllerOpenApi {
 
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
@@ -63,8 +65,11 @@ public class CozinhaController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public CozinhaModel adicionar(@RequestBody @Valid Cozinha cozinha) {
-		 return cozinhaModelAssembler.toModel(cadastroCozinha.salvar(cozinha));	
+	public CozinhaModel adicionar(@RequestBody @Valid CozinhaInput cozinhaInput) {
+		Cozinha cozinha = cozinhaInputDisassembler.toDomainObject(cozinhaInput);
+		cozinha = cadastroCozinha.salvar(cozinha);
+		
+		return cozinhaModelAssembler.toModel(cozinha);
 	}
 	
 	@PutMapping("/{cozinhaId}")
@@ -83,7 +88,7 @@ public class CozinhaController {
 	public void remover(@PathVariable Long cozinhaId) {     	
      	      cadastroCozinha.excluir(cozinhaId); 
 	}
-	
+
 	
 //	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 //	public List<Cozinha> listar1() {

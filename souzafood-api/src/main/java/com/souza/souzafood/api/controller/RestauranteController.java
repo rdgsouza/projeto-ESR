@@ -52,7 +52,8 @@ public class RestauranteController {
 	public List<RestauranteModel> listar() {
 		return restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll());
 	}
-	
+
+// https://app.algaworks.com/aulas/2033/fazendo-projecao-de-recursos-com-jsonview-do-jackson	
 	@JsonView(RestauranteView.ApenasNome.class)
 	@GetMapping(params = "projecao=apenas-nome")
 	public List<RestauranteModel> listarApenasNome() {

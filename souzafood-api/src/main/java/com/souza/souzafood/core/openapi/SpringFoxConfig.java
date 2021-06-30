@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -49,7 +50,7 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 //		e em seguida acrescentar o .ignoredParameterTypes abaixo
 //		fonte: https://stackoverflow.com/questions/46651381/is-there-a-way-i-can-stop-springfox-swagger-from-scanning-the-model-classes
 	
-		var typeResolver = new TypeResolver();
+		var typeResolver = new TypeResolver();  
 		
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
@@ -63,14 +64,24 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				.globalResponseMessage(RequestMethod.POST, globalPostPutResponseMessages())
 	            .globalResponseMessage(RequestMethod.PUT, globalPostPutResponseMessages())
 	            .globalResponseMessage(RequestMethod.DELETE, globalDeleteResponseMessages())
+//	            .globalOperationParameters(Arrays.asList(   //https://app.algaworks.com/aulas/2140/descrevendo-parametros-globais-em-operacoes
+//	            		new ParameterBuilder()
+//	            		    .name("campos")
+//	            		    .description("Nomes das propiedades para filtrar na resposta, separados por vírgula")
+//	            		    .parameterType("query")
+//	            		    .modelRef(new ModelRef("string"))
+//	            		    .build()))
 	            .additionalModels(typeResolver.resolve(Problem.class))
+	            .ignoredParameterTypes(ServletWebRequest.class) //https://app.algaworks.com/aulas/2138/ignorando-tipos-de-parametros-de-operacoes-na-documentacao
 	            .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
 	            .alternateTypeRules(AlternateTypeRules.newRule(
 	            		typeResolver.resolve(Page.class, CozinhaModel.class), 
 	            		CozinhasModelOpenApi.class)) //https://app.algaworks.com/aulas/2136/corrigindo-documentacao-com-substituicao-de-page
 				.apiInfo(apiInfo())
 				.tags(new Tag("Cidades", "Gerencia as cidades"),
-						new Tag("Grupos", "Gerencia os grupos de usuários"));
+				        new Tag("Grupos", "Gerencia os grupos de usuários"),
+				        new Tag("Cozinhas", "Gerencia as cozinhas"),
+				        new Tag("Formas de pagamento", "Gerencia as formas de pagamento"));
 //				.ignoredParameterTypes(clazz);	         
 	}
 	
