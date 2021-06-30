@@ -1,4 +1,4 @@
-package com.souza.souzafood.api.controller;
+package com.souza.souzafood.api.openapi.controller;
 
 import java.util.List;
 

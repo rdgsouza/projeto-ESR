@@ -1,4 +1,4 @@
-package com.souza.souzafood.core.openapi.model;
+package com.souza.souzafood.api.openapi.model;
 
 import java.util.List;
 

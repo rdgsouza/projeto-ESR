@@ -22,6 +22,7 @@ import com.souza.souzafood.api.assembler.GrupoInputDisassembler;
 import com.souza.souzafood.api.assembler.GrupoModelAssembler;
 import com.souza.souzafood.api.model.GrupoModel;
 import com.souza.souzafood.api.model.input.GrupoInput;
+import com.souza.souzafood.api.openapi.controller.GrupoControllerOpenApi;
 import com.souza.souzafood.domain.model.Grupo;
 import com.souza.souzafood.domain.repository.GrupoRepository;
 import com.souza.souzafood.domain.service.CadastroGrupoService;

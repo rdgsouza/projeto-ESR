@@ -21,6 +21,7 @@ import com.souza.souzafood.api.assembler.CidadeInputDisassembler;
 import com.souza.souzafood.api.assembler.CidadeModelAssembler;
 import com.souza.souzafood.api.model.CidadeModel;
 import com.souza.souzafood.api.model.input.CidadeInput;
+import com.souza.souzafood.api.openapi.controller.CidadeControllerOpenApi;
 import com.souza.souzafood.domain.exception.EstadoNaoEncontradoException;
 import com.souza.souzafood.domain.exception.NegocioException;
 import com.souza.souzafood.domain.model.Cidade;

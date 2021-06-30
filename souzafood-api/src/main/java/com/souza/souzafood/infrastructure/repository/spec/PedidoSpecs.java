@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import com.souza.souzafood.domain.filter.PedidoFilter;
 import com.souza.souzafood.domain.model.Pedido;
 
-public class PedidoSpecs {
+public class PedidoSpecs { 
 
 	public static Specification<Pedido> usandoFiltro(PedidoFilter filtro) {
 // Vamos fazer o retorno de outra forma sem implementar a interface Specification em uma classe para poder assim usar o seu metodo toPredicate
