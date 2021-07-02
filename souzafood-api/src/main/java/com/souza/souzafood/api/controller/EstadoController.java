@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,13 +21,14 @@ import com.souza.souzafood.api.assembler.EstadoModelAssembler;
 import com.souza.souzafood.api.model.EstadoModel;
 import com.souza.souzafood.api.model.input.EstadoInput;
 import com.souza.souzafood.api.model.input.EstadoInputDisassembler;
+import com.souza.souzafood.api.openapi.controller.EstadoControllerOpenApi;
 import com.souza.souzafood.domain.model.Estado;
 import com.souza.souzafood.domain.repository.EstadoRepository;
 import com.souza.souzafood.domain.service.CadastroEstadoService;
 
 @RestController
-@RequestMapping("/estados")
-public class EstadoController {
+@RequestMapping(path = "/estados", produces = MediaType.APPLICATION_JSON_VALUE)
+public class EstadoController implements EstadoControllerOpenApi {
 
 	@Autowired
 	private EstadoRepository estadoRepository; 

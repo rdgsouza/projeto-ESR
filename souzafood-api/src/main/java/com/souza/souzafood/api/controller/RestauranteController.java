@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +24,7 @@ import com.souza.souzafood.api.assembler.RestauranteModelAssembler;
 import com.souza.souzafood.api.model.RestauranteModel;
 import com.souza.souzafood.api.model.input.RestauranteInput;
 import com.souza.souzafood.api.model.view.RestauranteView;
-import com.souza.souzafood.api.openapi.model.RestauranteBasicoModelOpenApi;
+import com.souza.souzafood.api.openapi.controller.RestauranteControllerOpenApi;
 import com.souza.souzafood.domain.exception.CidadeNaoEncontradaException;
 import com.souza.souzafood.domain.exception.CozinhaNaoEncontradaException;
 import com.souza.souzafood.domain.exception.NegocioException;
@@ -32,13 +33,9 @@ import com.souza.souzafood.domain.model.Restaurante;
 import com.souza.souzafood.domain.repository.RestauranteRepository;
 import com.souza.souzafood.domain.service.CadastroRestauranteService;
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-
 @RestController
-@RequestMapping(value = "/restaurantes")
-public class RestauranteController {
+@RequestMapping(path = "/restaurantes", produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestauranteController implements RestauranteControllerOpenApi {
 
 	@Autowired
 	private RestauranteRepository restauranteRepository;
@@ -52,26 +49,19 @@ public class RestauranteController {
 	@Autowired
 	private RestauranteInputDisassembler restauranteInputDisassembler;
 
-//	https://app.algaworks.com/aulas/2143/descrevendo-parametros-de-projecoes-em-endpoints-de-consultas
-	@ApiOperation(value = "Listar restaurantes", response = RestauranteBasicoModelOpenApi.class)
-	@ApiImplicitParams({
-	   @ApiImplicitParam(value = "Nome da projeção de pedidos", allowableValues = "apenas-nome",
-			   name = "projecao", paramType = "query", type = "string"
-			   )	
-	})
 	@JsonView(RestauranteView.Resumo.class)
 	@GetMapping
 	public List<RestauranteModel> listar() {
 		return restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll());
 	}
 
-	@ApiOperation(value = "Listar restaurantes", hidden = true)
 // https://app.algaworks.com/aulas/2033/fazendo-projecao-de-recursos-com-jsonview-do-jackson	
 	@JsonView(RestauranteView.ApenasNome.class)
 	@GetMapping(params = "projecao=apenas-nome")
-	public List<RestauranteModel> listarApenasNome() {
+	public List<RestauranteModel> listarApenasNomes() {
 		return listar();
 	}
+
 	
 //	@Autowired
 //	private SmartValidator validator;
@@ -191,8 +181,8 @@ public class RestauranteController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void fechar(@PathVariable Long restauranteId) {
 	    cadastroRestaurante.fechar(restauranteId);
-	}    
-	
+	}
+
 	// Não vamos usar a atualização parcial no nosso projeto
 //	@PatchMapping("/{restauranteId}")
 //	public Restaurante atulizarParcial(@PathVariable Long restauranteId, 
