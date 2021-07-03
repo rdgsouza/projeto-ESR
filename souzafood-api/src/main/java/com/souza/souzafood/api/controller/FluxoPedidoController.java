@@ -2,6 +2,7 @@ package com.souza.souzafood.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -11,12 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.souza.souzafood.api.assembler.PedidoStatusResumoModelAssembler;
 import com.souza.souzafood.api.model.PedidoStatusResumoModel;
+import com.souza.souzafood.api.openapi.controller.FluxoPedidoControllerOpenApi;
 import com.souza.souzafood.domain.service.EmissaoPedidoService;
 import com.souza.souzafood.domain.service.FluxoPedidoService;
 
 @RestController
-@RequestMapping(value = "/pedidos/{codigoPedido}")
-public class FluxoPedidoController {
+@RequestMapping(path = "/pedidos/{codigoPedido}", produces = MediaType.APPLICATION_JSON_VALUE)
+public class FluxoPedidoController implements FluxoPedidoControllerOpenApi {
 
 	@Autowired
 	private FluxoPedidoService fluxoPedido;

@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import com.souza.souzafood.api.assembler.ProdutoInputDisassembler;
 import com.souza.souzafood.api.assembler.ProdutoModelAssembler;
 import com.souza.souzafood.api.model.ProdutoModel;
 import com.souza.souzafood.api.model.input.ProdutoInput;
+import com.souza.souzafood.api.openapi.controller.RestauranteProdutoControllerOpenApi;
 import com.souza.souzafood.domain.model.Produto;
 import com.souza.souzafood.domain.model.Restaurante;
 import com.souza.souzafood.domain.repository.ProdutoRepository;
@@ -27,8 +29,9 @@ import com.souza.souzafood.domain.service.CadastroProdutoService;
 import com.souza.souzafood.domain.service.CadastroRestauranteService;
 
 @RestController
-@RequestMapping("/restaurantes/{restauranteId}/produtos")
-public class RestauranteProdutoController {
+@RequestMapping(path = "/restaurantes/{restauranteId}/produtos", 
+    produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestauranteProdutoController implements RestauranteProdutoControllerOpenApi { 
 
 	@Autowired
 	private ProdutoRepository produtoRepository;
