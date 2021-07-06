@@ -1,4 +1,4 @@
-package com.souza.souzafood.core.openapi;
+package com.souza.souzafood.core.springfox;
 
 import java.io.File;
 import java.io.InputStream;

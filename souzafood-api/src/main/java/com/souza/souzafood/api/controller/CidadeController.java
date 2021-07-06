@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.souza.souzafood.api.ResourceUriHelper;
 import com.souza.souzafood.api.assembler.CidadeInputDisassembler;
 import com.souza.souzafood.api.assembler.CidadeModelAssembler;
 import com.souza.souzafood.api.model.CidadeModel;
@@ -64,9 +65,13 @@ public class CidadeController implements CidadeControllerOpenApi {
 			@RequestBody @Valid CidadeInput cidadeInput) {
 		try {
 			Cidade cidade = cidadeInputDisassembler.toDomainObject(cidadeInput);
-			return  cidadeModelAssembler.toModel(cadastroCidade.salvar(cidade));
 			
-		} catch (EstadoNaoEncontradoException e) {
+			CidadeModel cidadeModel =  cidadeModelAssembler.toModel(cadastroCidade.salvar(cidade));
+
+			ResourceUriHelper.addUriInResponseHeader(cidadeModel.getId());
+			
+			return cidadeModel;
+		 } catch (EstadoNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
 	}
