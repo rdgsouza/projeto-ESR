@@ -14,9 +14,10 @@ public class WebConfig implements WebMvcConfigurer {
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 
-		registry.addMapping("/**").allowedMethods("*");
-//		     .allowedOrigins("*")
-//		.maxAge(30);   
+		registry.addMapping("/**")
+		        .allowedMethods("*");
+//		        .allowedOrigins("*")
+//		        .maxAge(30);   
 	}
 
 //	https://app.algaworks.com/aulas/2110/implementando-requisicoes-condicionais-com-shallow-etags

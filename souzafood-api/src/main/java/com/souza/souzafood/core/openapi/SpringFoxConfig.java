@@ -1,11 +1,18 @@
 package com.souza.souzafood.core.openapi;
 
+import java.io.File;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLStreamHandler;
 import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -15,6 +22,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.fasterxml.classmate.TypeResolver;
+import com.google.common.base.Predicates;
 import com.souza.souzafood.api.exceptionhandler.Problem;
 import com.souza.souzafood.api.model.CozinhaModel;
 import com.souza.souzafood.api.model.PedidoResumoModel;
@@ -60,6 +68,9 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				.paths(PathSelectors.any())//Não precisava colocar o any porque quando não coloca por
 //				padrão ele ja seleciona todos os controladores referente ao pacote acima deixamos apenas por referencia
 //				.paths(PathSelectors.ant("/restaurantes/*")) //Seleciona apenas os contraladores com o nome 'restaurantes' 'barra' 'qualquer coisa'.	 
+				.paths(Predicates.not(PathSelectors.ant("/home/rodrigo/Documents/catalago/*"))) //Caso queira ocultar um controlador no mapeamento da documentação
+//				OBS:Criamos o controlador fotosController e colocamos o seu requestMapping como: /home/rodrigo/Documents/catalago/{nomeArquivo}
+//				esse controlador tem como função servir as fotos de acordo com o nome do arquivo
 				.build()
 				.useDefaultResponseMessages(false)
 				.globalResponseMessage(RequestMethod.GET, globalGetResponseMessages())
@@ -74,8 +85,11 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 //	            		    .modelRef(new ModelRef("string"))
 //	            		    .build()))
 	            .additionalModels(typeResolver.resolve(Problem.class))
-	            .ignoredParameterTypes(ServletWebRequest.class) //https://app.algaworks.com/aulas/2138/ignorando-tipos-de-parametros-de-operacoes-na-documentacao
-	            .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
+	            .ignoredParameterTypes(ServletWebRequest.class,
+	            		URL.class, URI.class, URLStreamHandler.class, Resource.class, 
+	            		File.class, InputStream.class, InputStreamResource.class) //https://app.algaworks.com/aulas/2138/ignorando-tipos-de-parametros-de-operacoes-na-documentacao
+	            .directModelSubstitute(Pageable.class, PageableModelOpenApi.class
+	            		)
 	            .alternateTypeRules(AlternateTypeRules.newRule(
 	            		typeResolver.resolve(Page.class, CozinhaModel.class), 
 	            		CozinhasModelOpenApi.class)) //https://app.algaworks.com/aulas/2136/corrigindo-documentacao-com-substituicao-de-page
@@ -90,7 +104,10 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				        new Tag("Pedidos", "Gerencia os pedidos"),
 				        new Tag("Restaurantes", "Gerencia os restaurantes"),
 				        new Tag("Estados", "Gerencia os estados"),
-				        new Tag("Produtos", "Gerencia os produtos de restaurantes")); 
+				        new Tag("Produtos", "Gerencia os produtos de restaurantes"),
+				        new Tag("Usuários", "Gerencia os usuários"),
+				        new Tag("Estatísticas", "Estatísticas da AlgaFood"));
+ 
 //				.ignoredParameterTypes(clazz);	         
 	}
 	

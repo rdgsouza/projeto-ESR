@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +28,7 @@ import com.souza.souzafood.api.assembler.UrlFotoProdutoModelAssembler;
 import com.souza.souzafood.api.model.FotoProdutoModel;
 import com.souza.souzafood.api.model.UrlFotoProdutoModel;
 import com.souza.souzafood.api.model.input.FotoProdutoInput;
+import com.souza.souzafood.api.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
 import com.souza.souzafood.domain.exception.EntidadeNaoEncontradaException;
 import com.souza.souzafood.domain.model.FotoProduto;
 import com.souza.souzafood.domain.model.Produto;
@@ -34,10 +36,10 @@ import com.souza.souzafood.domain.service.CadastroProdutoService;
 import com.souza.souzafood.domain.service.CatalagoFotoProdutoService;
 import com.souza.souzafood.domain.service.FotoStorageService;
 import com.souza.souzafood.domain.service.FotoStorageService.FotoRecuperada;
-
 @RestController
-@RequestMapping("/restaurantes/{restauranteId}/produtos")
-public class RestauranteProdutoFotoController {
+@RequestMapping(path = "/restaurantes/{restauranteId}/produtos/{produtoId}/foto",
+        produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerOpenApi {
 
 	@Autowired
 	private CadastroProdutoService cadastroProduto;
@@ -54,14 +56,14 @@ public class RestauranteProdutoFotoController {
 	@Autowired
 	private FotoStorageService fotoStorage;
 	
-	@PutMapping(value = "/{produtoId}/foto",
-			consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public FotoProdutoModel atualizarFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId,
-			@Valid FotoProdutoInput fotoProdutoInput) throws IOException {
+	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public FotoProdutoModel atualizarFoto(@PathVariable Long restauranteId,
+			@PathVariable Long produtoId, @Valid FotoProdutoInput fotoProdutoInput, 
+			@RequestPart(required = true) MultipartFile arquivo) throws IOException {
 
 		Produto produto = cadastroProduto.buscarOuFalhar(restauranteId, produtoId);
 
-		MultipartFile arquivo = fotoProdutoInput.getArquivo();
+//		MultipartFile arquivo = fotoProdutoInput.getArquivo();
        		
 		FotoProduto foto = new FotoProduto();
 		foto.setProduto(produto);
@@ -75,18 +77,22 @@ public class RestauranteProdutoFotoController {
 		return fotoProdutoModelAssembler.toModel(fotoSalva);
 
 	}
+	
     //Passando na requisição o Accept application/json cai aqui e: Busca as infomações da foto em formato JSON
-	@GetMapping(value = "/{produtoId}/foto", produces = MediaType.APPLICATION_JSON_VALUE)
-	public FotoProdutoModel buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+	@GetMapping
+	public FotoProdutoModel buscar(@PathVariable Long restauranteId, 
+			@PathVariable Long produtoId) {
 
 		FotoProduto fotoProduto = catalagoFotoProduto.buscarOuFalhar(restauranteId, produtoId);
 
 		return fotoProdutoModelAssembler.toModel(fotoProduto);
 	}
-	//Passando na requisição o Accept image/jpeg,image/png cai aqui e:
-	//Se a configuração da nossa api para buscar a foto for local então busca a foto no seu formato png ou jpeg
-	//Se a configuração da nossa api para buscar a foto for na S3 então busca a url da foto de armazenamento da foto na S3
-	@GetMapping(value = "/{produtoId}/foto")
+	
+	//Se for passado na hora de fazer a requisição o Accept: image/jpeg ou image/png, cai aqui, e
+	//se a configuração da nossa api para servir a foto estiver com armazenamento local então busca a foto no seu 
+    //formato png ou jpeg usando o caminho local de armazenamento da foto.
+	//Se a configuração da nossa api para servir a foto estiver com armazenamento na S3 então busca pelo caminho da url da foto na S3
+	@GetMapping(produces = MediaType.ALL_VALUE)
 	public ResponseEntity<?> servir(@PathVariable Long restauranteId,
 			@PathVariable Long produtoId, @RequestHeader(name = "accept") String acceptHeader) 
 				    throws HttpMediaTypeNotAcceptableException {
