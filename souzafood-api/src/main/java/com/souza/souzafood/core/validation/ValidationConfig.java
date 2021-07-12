@@ -8,6 +8,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 @Configuration
 public class ValidationConfig {
 
+//https://app.algaworks.com/aulas/1962/usando-o-resource-bundle-do-spring-como-resource-bundle-do-bean-validation
 	@Bean
 	public LocalValidatorFactoryBean validator(MessageSource messageSource) {
 

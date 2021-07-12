@@ -10,6 +10,7 @@ import lombok.Setter;
 @Setter
 public class PagedModelOpenApi<T> {
 
+//	https://app.algaworks.com/aulas/2136/corrigindo-documentacao-com-substituicao-de-page
 	private List<T> content;
 	
 	@ApiModelProperty(example = "10", value = "Quantidade de registros por página")

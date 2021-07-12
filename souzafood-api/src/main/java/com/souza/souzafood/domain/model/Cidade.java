@@ -33,7 +33,7 @@ public class Cidade {
 	private String nome;
 	
 	@Valid	
-	@ConvertGroup(from = Default.class, to = Groups.EstadoId.class)
+	@ConvertGroup(from = Default.class, to = Groups.EstadoId.class) //https://app.algaworks.com/aulas/1955/agrupando-e-restringindo-constraints-que-devem-ser-usadas-na-validacao
 	@NotNull
 	@ManyToOne                  
 	@JoinColumn(nullable = false)

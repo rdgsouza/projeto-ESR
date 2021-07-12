@@ -6,6 +6,7 @@ import org.springframework.validation.SmartValidator;
 @Configuration
 public class ControllerValidateUtilsConfiguration {
 
+//	https://app.algaworks.com/forum/topicos/83704/duvida-na-criacao-de-uma-classe-util
 	 public ControllerValidateUtilsConfiguration(SmartValidator validator) {
 	        ControllerValidateUtil.setValidator(validator);
 	    }

@@ -1,6 +1,6 @@
 package com.souza.souzafood.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.souza.souzafood.api.exceptionhandler.Problem;
 import com.souza.souzafood.api.model.CidadeModel;
@@ -17,7 +17,7 @@ import io.swagger.annotations.ApiResponses;
 public interface CidadeControllerOpenApi {
 
 	@ApiOperation("Lista as cidades")
-	List<CidadeModel> listar(); 
+	CollectionModel<CidadeModel> listar(); 
 	
 	@ApiOperation("Busca uma cidade por ID")
 	@ApiResponses({

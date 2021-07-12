@@ -1,8 +1,10 @@
 package com.souza.souzafood.api.controller;
 
-import java.util.List;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,9 +34,12 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
 	private UsuarioModelAssembler usuarioModelAssembler;
 
 	@GetMapping
-	public List<UsuarioModel> listar(@PathVariable Long restauranteId) {
+	public CollectionModel<UsuarioModel> listar(@PathVariable Long restauranteId) {
 		Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
-		return usuarioModelAssembler.toCollectionModel(restaurante.getResponsaveis());
+		return usuarioModelAssembler.toCollectionModel(restaurante.getResponsaveis())
+				.removeLinks()
+				.add(linkTo(methodOn(RestauranteUsuarioResponsavelController.class)
+						.listar(restauranteId)).withSelfRel());
 	}
 
 	@DeleteMapping("/{usuarioId}")

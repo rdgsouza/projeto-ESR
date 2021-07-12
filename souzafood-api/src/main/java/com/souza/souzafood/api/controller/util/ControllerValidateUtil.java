@@ -13,6 +13,7 @@ public class ControllerValidateUtil {
 		ControllerValidateUtil.validator = validator;
 	}
 
+//	https://app.algaworks.com/aulas/1967/executando-processo-de-validacao-programaticamente
 	public static void validate(Object object, String objectName) {
 
 		BeanPropertyBindingResult bindingResult =

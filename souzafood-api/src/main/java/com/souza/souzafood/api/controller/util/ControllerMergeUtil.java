@@ -14,7 +14,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ControllerMergeUtil {
-
+	
+//	https://app.algaworks.com/aulas/1967/executando-processo-de-validacao-programaticamente
 	public static void merge(Map<String, Object> dadosOrigem, 
 			Object objetoDestino, HttpServletRequest request) {
 
