@@ -5,6 +5,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.TemplateVariable;
+import org.springframework.hateoas.TemplateVariable.VariableType;
+import org.springframework.hateoas.TemplateVariables;
+import org.springframework.hateoas.UriTemplate;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
@@ -32,8 +37,25 @@ public class PedidoModelAssembler
     public PedidoModel toModel(Pedido pedido) {
         PedidoModel pedidoModel = createModelWithId(pedido.getCodigo(), pedido);
         modelMapper.map(pedido, pedidoModel);
+
+        TemplateVariables pageVariables = new TemplateVariables(
+        		new TemplateVariable("page", VariableType.REQUEST_PARAM),
+        		new TemplateVariable("size", VariableType.REQUEST_PARAM),
+        		new TemplateVariable("sort", VariableType.REQUEST_PARAM));
         
-        pedidoModel.add(linkTo(PedidoController.class).withRel("pedidos"));
+        
+        TemplateVariables filtroVariables = new TemplateVariables(
+        		new TemplateVariable("clienteId", VariableType.REQUEST_PARAM),
+        		new TemplateVariable("restauranteId", VariableType.REQUEST_PARAM),
+        		new TemplateVariable("dataCriacaoInicio", VariableType.REQUEST_PARAM),
+        		new TemplateVariable("dataCriacaoFim", VariableType.REQUEST_PARAM));
+           
+        String pedidosUrl = linkTo(PedidoController.class).toUri().toString();
+        
+//  https://app.algaworks.com/forum/topicos/84494/link-uritemplate-template-string-rel-depreciado
+//        pedidoModel.add(Link.of(UriTemplate.of(pedidosUrl, pageVariables), "pedidos"));
+        pedidoModel.add(Link.of(UriTemplate.of(pedidosUrl, 
+        		pageVariables.concat(filtroVariables)), "pedidos"));
         
         pedidoModel.getRestaurante().add(linkTo(methodOn(RestauranteController.class)
                 .buscar(pedido.getRestaurante().getId())).withSelfRel());

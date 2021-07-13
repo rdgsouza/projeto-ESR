@@ -24,6 +24,7 @@ import com.souza.souzafood.api.model.PedidoResumoModel;
 import com.souza.souzafood.api.model.input.PedidoInput;
 import com.souza.souzafood.api.model.input.PedidoInputDisassembler;
 import com.souza.souzafood.api.openapi.controller.PedidoControllerOpenApi;
+import com.souza.souzafood.core.data.PageWrapper;
 import com.souza.souzafood.core.data.PageableTranslator;
 import com.souza.souzafood.domain.exception.EntidadeNaoEncontradaException;
 import com.souza.souzafood.domain.exception.NegocioException;
@@ -53,7 +54,6 @@ public class PedidoController implements PedidoControllerOpenApi {
 	@Autowired
 	private PedidoInputDisassembler pedidoInputDisassembler;
 
-	
 	@Autowired
 	private PagedResourcesAssembler<Pedido> pagedResourcesAssembler; //https://app.algaworks.com/aulas/2171/desafio-adicionando-hypermedia-em-recursos-de-pedidos-paginacao
 	
@@ -81,10 +81,12 @@ public class PedidoController implements PedidoControllerOpenApi {
 	@GetMapping
 	public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro, 
 	        @PageableDefault(size = 10) Pageable pageable) {
-	    pageable = traduzirPageable(pageable);
+	   Pageable pageableTraduzido = traduzirPageable(pageable);
 	    
 	    Page<Pedido> pedidosPage = pedidoRepository.findAll(
-	            PedidoSpecs.usandoFiltro(filtro), pageable);
+	            PedidoSpecs.usandoFiltro(filtro), pageableTraduzido);
+//	    https://app.algaworks.com/aulas/2172/corrigindo-links-de-paginacao-com-ordenacao
+	    pedidosPage = new PageWrapper<>(pedidosPage, pageable);
 	    
 	    return pagedResourcesAssembler.toModel(pedidosPage, pedidoResumoModelAssembler);
 	}
