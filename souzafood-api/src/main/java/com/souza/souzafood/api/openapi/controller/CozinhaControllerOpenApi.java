@@ -1,7 +1,7 @@
 package com.souza.souzafood.api.openapi.controller;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 
 import com.souza.souzafood.api.exceptionhandler.Problem;
 import com.souza.souzafood.api.model.CozinhaModel;
@@ -18,7 +18,7 @@ import io.swagger.annotations.ApiResponses;
 public interface CozinhaControllerOpenApi {
 
     @ApiOperation("Lista as cozinhas com paginação")
-    public Page<CozinhaModel> listar(Pageable pageable);
+    public PagedModel<CozinhaModel> listar(Pageable pageable);
     
     @ApiOperation("Busca uma cozinha por ID")
     @ApiResponses({

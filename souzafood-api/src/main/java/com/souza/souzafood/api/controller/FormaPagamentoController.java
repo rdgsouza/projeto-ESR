@@ -102,7 +102,8 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
     	        return null;
     	    }
     	 
-    	 FormaPagamento formaPagamento = cadastroFormaPagamento.buscarOuFalhar(formaPagamentoId);
+    	 FormaPagamento formaPagamento = cadastroFormaPagamento
+    			 .buscarOuFalhar(formaPagamentoId);
     	    
     	 FormaPagamentoModel formaPagamentoModel = formaPagamentoModelAssembler.toModel(formaPagamento);
     	    

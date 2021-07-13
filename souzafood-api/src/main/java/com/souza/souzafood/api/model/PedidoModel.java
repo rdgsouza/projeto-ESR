@@ -4,15 +4,19 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
+@Relation(collectionRelation = "pedidos")
 @Setter
-public class PedidoModel {
+@Getter
+public class PedidoModel extends RepresentationModel<PedidoModel> {
 
 	@ApiModelProperty(example = "f9981ca4-5a5e-4da3-af04-933861df3e55")
 	private String codigo;
